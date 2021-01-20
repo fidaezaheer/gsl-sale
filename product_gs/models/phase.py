@@ -39,6 +39,7 @@ class GSProjectPhase(models.Model):
     # project_bdm2 = fields.Char(string='Project BDM 2',)
     portfolio = fields.Char(string='Portfolio',)
     address = fields.Char(string='Project Address',)
+    calendly_url = fields.Char(string='CALENDLY URL',)
     decom_start = fields.Date(string='Decom start',default=fields.Date.context_today,)
     decom_end = fields.Date(string='Decom end',default=fields.Date.context_today,)
     

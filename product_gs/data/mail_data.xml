@@ -127,7 +127,7 @@ Please see your request-confirmation attached. Note: this is only to confirm wha
 
 If you have not yet registered to receive automatic notification whenever Green Standards has new inventory available for donation in your area, please follow this link to do so now: http://greenstandardsltd.com/for-nonprofits/ <br />
 
-As always, if you have any questions, feel free to contact your Project Coordinator, ${phase.project_pm_lead_id.name}  by Phone: ${phase.project_pm_lead_id.phone}, or E-mail: ${phase.partner_id.email} <br />
+As always, if you have any questions, feel free to contact your Project Coordinator, ${phase.project_pm_lead_id.name}  by Phone: ${phase.project_pm_lead_id.phone}, or E-mail: ${phase.project_pm_lead_id.email} <br />
                     </p>
                 </div>
             </field>

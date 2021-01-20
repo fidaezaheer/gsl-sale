@@ -50,7 +50,7 @@ class StockMove(models.Model):
     dimensions = fields.Char(related='product_id.dimensions', readonly=False)
     building = fields.Char(related='product_id.building', readonly=False)
     description_sale = fields.Text(related='product_id.description_sale', readonly=False)
-    
+    list_price = fields.Float('Sales Price', digits='Product Price', related='product_id.list_price', readonly=False)
 
     reserved_availability = fields.Float(
         'Reserved', compute='_compute_reserved_availability',
