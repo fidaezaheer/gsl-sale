@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="email_template_request_confirm" model="mail.template">
+            <field name="name">Request: You’re Receiving Furniture</field>
+            <field name="model_id" ref="sale.model_sale_order" />
+            <field name="subject">You're Receiving Furniture!</field>
+            <field name="email_from">${(object.user_id.email_formatted or user.email_formatted) | safe}</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    % set phase = object.order_line[:1].product_id.phase_id
+                    % set phase_unrequested = phase.get_unrequested_items()
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear ${object.partner_id.name}
+                        <br />
+                        <br />
+                        <span>Thank you for your request. I am pleased to let you know we have selected your organization to receive part of the inventory! Find the list of items your organization has been allocated below. The expected delivery window will fall between [${phase.decom_start} – ${phase.decom_end}].  I will be in touch closer to the date let you know the final date/time.</span>
+                        <br />
+
+                        <strong>Please keep in mind that our delivery is a tailgate offload style, meaning the movers will deliver requested items to your location, but will not be responsible for transporting items into your facility/building, and it is your obligation to have able-bodied staff and/or volunteers as well as any necessary safety equipment (e.g. gloves) to transport items into your building. </strong>
+                        <br />
+
+                        <span>The next steps are to:</span>
+                        <br />
+
+                        <ol>
+                            <li>Please confirm you are still interested and able to receive the donation</li>
+                            <li>Please sign your Transfer of Title (TOT) document which secures your donation, to be signed at your earliest convenience (sent after you provide the below information)</li>
+                            <li>Please reply with a short message on how this donation will impact your organization. We send these back to our donor to showcase the organizations they are donating to. </li>
+                        </ol>
+                        <br />
+                         
+                        <span>If you could gather the following information so I can prepare the TOT forms that would be helpful:</span>
+                        <br />
+
+                        <ul>
+                            <li>Will you be the one on site accepting the delivery, or will it be a superintendent/custodial team (3-7 people suggested)</li>
+                            <li>Any special instructions to leave for the delivery driver?</li>
+                            <li>Do you have any preferred delivery dates or times?</li>
+                        </ul>
+                        <br />
+
+                        <strong>The Items You Will Be Receiving </strong>
+                        <br />
+                        <br />
+                    </p>
+                    <table width="100%" style="color: #454748; font-size: 12px; border-collapse: collapse;">
+                        <tr style="border-bottom: 2px solid #dee2e6;">
+                            <td align="left">
+                                <strong>Pic</strong>
+                            </td>
+                            <td align="left">
+                                <strong>Items</strong>
+                            </td>
+                            <td width="15%" align="center">
+                                <strong>Quantity</strong>
+                            </td>
+                        </tr>
+                    </table>
+                    % for line in object.order_line:
+                        % if not line.is_delivery and line.display_type not in ['line_section', 'line_note']:
+                    <table width="100%" style="color: #454748; font-size: 12px; border-collapse: collapse;">
+                        <tr style="${loop.cycle('background-color: #f2f2f2', 'background-color: #ffffff')}">
+                            <td align="left">${line.product_id.photo_id_wo_ext}</td>
+                            <td align="left">${line.product_id.display_name}</td>
+                            <td width="15%" align="center">${line.product_uom_qty}</td>
+                        </tr>
+                    </table>
+                    <br />
+                    <br />
+
+                    % endif
+                    % endfor
+                    <span class="text-muted">*(keep in mind this list may differ on the actual delivery in the case where the donor decides to retain anything)</span>
+                    <br />
+                    <br />
+                    % if phase_unrequested:
+                    <span>The items in the table below are still available if you were interested in taking more furniture items. Our goal is to keep as much out of landfill as possible, so if there is anything else your organization can reasonably make use, please do not hesitate to make another request.</span>
+                    <br />
+                    <br />
+
+                    <table width="100%" style="color: #454748; font-size: 12px; border-collapse: collapse;">
+                        <tr style="border-bottom: 2px solid #dee2e6;">
+                            <td align="left">
+                                <strong>Pic</strong>
+                            </td>
+                            <td align="left">
+                                <strong>Items</strong>
+                            </td>
+                            <td width="15%" align="center">
+                                <strong>Quantity</strong>
+                            </td>
+                        </tr>
+                    </table>
+                    % for product_id in phase_unrequested:
+                    <table width="100%" style="color: #454748; font-size: 12px; border-collapse: collapse;">
+                        <tr style="${loop.cycle('background-color: #f2f2f2', 'background-color: #ffffff')}">
+                            <td align="left">${product_id.photo_id_wo_ext}</td>
+                            <td align="left">${product_id.display_name}</td>
+                            <td width="15%" align="center">${product_id.unrequest_qty}</td>
+                        </tr>
+                    </table>
+                    % endfor
+                    % endif
+                </div>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True" />
+        </record>
+
+        <record id="email_template_request_after_request" model="mail.template">
+            <field name="name">Request: After request Email</field>
+            <field name="model_id" ref="sale.model_sale_order" />
+            <field name="subject">Thank you for filling out Request Form!</field>
+            <field name="email_from">${(object.user_id.email_formatted or user.email_formatted) | safe}</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    % set phase = object.order_line[:1].product_id.phase_id
+                    % set phase_unrequested = phase.get_unrequested_items()
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+Dear ${object.partner_id.name},<br/><br/>
+Thank you for filling out Request Form ${phase.project_id.number}-${phase.address}!<br/>
+
+Please see your request-confirmation attached. Note: this is only to confirm what you have requested, not necessarily what you will be receiving. You will be notified shortly if you will be receiving donations. <br />
+
+If you have not yet registered to receive automatic notification whenever Green Standards has new inventory available for donation in your area, please follow this link to do so now: http://greenstandardsltd.com/for-nonprofits/ <br />
+
+As always, if you have any questions, feel free to contact your Project Coordinator, ${phase.project_pm_lead_id.name}  by Phone: ${phase.project_pm_lead_id.phone}, or E-mail: ${phase.partner_id.email} <br />
+                    </p>
+                </div>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True" />
+        </record>
+        <record id="email_template_request_after_offer" model="mail.template">
+            <field name="name">Request: After offer Email</field>
+            <field name="model_id" ref="sale.model_sale_order" />
+            <field name="subject">Thank you for submitting your resale offer!</field>
+            <field name="email_from">${(object.user_id.email_formatted or user.email_formatted) | safe}</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    % set phase = object.order_line[:1].product_id.phase_id
+                    % set phase_unrequested = phase.get_unrequested_items()
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi ${object.partner_id.name} <br/> <br/>
+                        Thank you for submitting your resale offer for the project in ${phase.address}. Please see attached for a copy of your submitted offer. A resale specialist will be in touch with you shortly. If you have any questions or concerns, feel free to reach out to your contact on the resale team. <br/>
+                        <span class="text-muted">Note: All resale offers submitted are subject to review. This email is just a confirmation that we have received your offer and does not represent a commitment on Green Standards to go through with the offer.</span> <br/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True" />
+        </record>
+
+    </data>
+</odoo>

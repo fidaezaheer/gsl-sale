@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="view_gs_project_tree" model="ir.ui.view">
+            <field name="name">view_gs_project_tree</field>
+            <field name="model">gs.project</field>
+            <field name="type">tree</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <tree string="model_tree" create="true" delete="true" edit="true">
+                    <field name="name" />
+                    <field name="phase_ids" />
+                    <field name="create_date" />
+                </tree>
+            </field>
+        </record>
+        
+        <record id="stock.product_template_action_product" model="ir.actions.act_window">
+            <field name="context" >{"search_default_consumable": 1, 'default_type': 'product', 'quantity_available_locations_domain': ('internal',), 'search_default_project_id': context.get('project_id'), 'search_default_phase_id': context.get('default_phase_id')}</field>
+        </record>
+        
+        
+        <!-- Form view for "model" -->
+        <record id="view_gs_project_form" model="ir.ui.view">
+            <field name="name">view_gs_project_form</field>
+            <field name="model">gs.project</field>
+            <field name="type">form</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <form string="model_form" create="true" delete="true" edit="true">
+                    <header>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!-- <button name="%(action_gs_intake)d" string="Intakes" type="action" class="oe_stat_button" icon="fa-arrows-v" context="{'project_id': id}" />
+                            <button name="%(stock.product_template_action_product)d" string="Products" type="action" class="oe_stat_button" icon="fa-arrows-v" context="{'project_id': id}" /> -->
+                        </div>    
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" />
+                            <h1>
+                                <field name="name" class="oe_inline"
+                                    placeholder="name" />
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="number" />
+                            </group>
+                        </group>
+                        <group string="Phases">
+                            <field name="phase_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+
+                        </group>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Search view for "model" -->
+        <record id="view_gs_project_search" model="ir.ui.view">
+            <field name="name">view_gs_project_search</field>
+            <field name="model">gs.project</field>
+            <field name="type">search</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <search string="model_search">
+                    <field name="name" />
+                </search>
+            </field>
+        </record>
+        
+        <!-- Main window action for "model" -->
+        <record id="action_gs_project_act_window" model="ir.actions.act_window">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Projects</field>
+            <field name="res_model">gs.project</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="domain">[]</field>
+            <field name="context">\{}</field>
+            <field name="search_view_id" ref="view_gs_project_search" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add new GS Project
+                </p><p>
+                </p>
+            </field>
+        </record>
+        <!-- <record id="action_gs_requests_act_window" model="ir.actions.act_window">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Requests</field>
+            <field name="res_model">sale.order.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="domain"></field>
+            <field name="context">{'search_default_draft_lines': True}</field>
+        </record> -->
+        
+
+        
+        <!-- Main menu for "model" -->
+        <record id="menu_gsop_main" model="ir.ui.menu" >
+            <field name="name">GSOP</field>
+            <field name="web_icon">fa fa-area-chart,#FFFFFF,#BC4242</field>
+            <field name="sequence" eval="10" />
+        </record>
+        <record id="menu_gsop_operation" model="ir.ui.menu" >
+            <field name="name">Operations</field>
+            <field name="sequence" eval="10" />
+            <field name="parent_id" ref="menu_gsop_main" />
+        </record>
+        <record id="menu_gs_project" model="ir.ui.menu" >
+            <field name="name">Projects</field>
+            <field name="sequence" eval="10" />
+            <field name="action" ref="action_gs_project_act_window" />
+            <field name="parent_id" ref="menu_gsop_operation" />
+        </record>
+
+        <record id="menu_gs_intake" model="ir.ui.menu" >
+            <field name="name">Inventory Moves</field>
+            <field name="sequence" eval="1000" />
+            <field name="action" ref="action_gs_intake" />
+            <field name="parent_id" ref="menu_gsop_main" />
+        </record>
+        <record id="menu_gs_inventory" model="ir.ui.menu" >
+            <field name="name">Inventory</field>
+            <field name="sequence" eval="1001" />
+            <field name="parent_id" ref="menu_gsop_main" />
+        </record>
+        <record id="menu_gs_product" model="ir.ui.menu" >
+            <field name="name">Items</field>
+            <field name="sequence" eval="10" />
+            <field name="action" ref="stock.product_template_action_product" />
+            <field name="parent_id" ref="menu_gs_inventory" />
+        </record>
+        <!-- <record id="menu_gs_requests" model="ir.ui.menu" >
+            <field name="name">Request</field>
+            <field name="sequence" eval="1002" />
+            <field name="action" ref="action_gs_requests_act_window" />
+            <field name="parent_id" ref="menu_gsop_main" />
+        </record> -->
+
+        <record id="action_gs_mailout" model="ir.actions.act_window">
+            <field name="name">Mailouts</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.public.category</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('mailout','=',True)]</field>
+            <field name="context">{'default_mailout': True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new Mailout
+              </p><p>
+              </p>
+            </field>
+        </record>
+        <record id="menu_gs_mailout" model="ir.ui.menu" >
+            <field name="name">Mailout</field>
+            <field name="sequence" eval="1003" />
+            <field name="action" ref="action_gs_mailout" />
+            <field name="parent_id" ref="menu_gsop_main" />
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- <record id="view_mailout_list_tree" model="ir.ui.view">
+            <field name="name">view_mailout_list_tree</field>
+            <field name="model">mailout.list</field>
+            <field name="type">tree</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <tree string="view_mailout_list_tree" >
+                    <field name="name" />
+                </tree>
+            </field>
+        </record> -->
+        
+        <!-- Form view for "model" -->
+        <record id="view_mailout_list_form" model="ir.ui.view">
+            <field name="name">view_mailout_list_form</field>
+            <field name="model">mailout.list</field>
+            <field name="type">form</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <form string="view_mailout_list_form" >
+                    <header>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" />
+                            <h1>
+                                <field name="name" class="oe_inline" placeholder="name" />
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="request_type" widget="radio"/>
+                            <field name="delivery_ids" widget="many2many_checkboxes"/>
+                        </group>
+                        <group>
+                            <field name="line_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <!-- <field name="sequence" widget="handle"/> -->
+                                    <field name="product_id" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_mailout" string="Mailout" type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.server" id="mailout_action">
+            <field name="name">Mailout</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="binding_model_id" ref="product.model_product_template" />
+            <field name="state">code</field>
+            <field name="code">
+if records:
+    action = records.generate_mailout()
+            </field>
+        </record>
+
+        
+        <record id="product_public_category_mailout" model="ir.ui.view">
+            <field name="name">product_public_category_mailout</field>
+            <field name="model">product.public.category</field>
+            <field name="inherit_id" ref="website_sale.product_public_category_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//sheet//field[1]" position="before">
+                    <div class="oe_button_box" name="button_box">
+                        <button string="Mailout" type="object" name="open_mailout" class="oe_stat_button" icon="fa-envelope" />
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='sequence']" position="after">
+                    <field name="request_type" widget="radio" />
+                    <field name="delivery_ids" widget="many2many_checkboxes"/>
+                    <field name="product_tmpl_ids" string="Products">
+                        <tree>
+                            <field string="Image" name="image_128" widget="image" options="{'preview_image': 'image_128'}" />
+                            <field name="name"/>
+                        </tree>
+                    </field>
+                </xpath>
+                
+                <xpath expr="//form" position="attributes">
+                    
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">0</attribute>
+                    
+                </xpath>
+                
+            </field>
+        </record>
+        
+        <record id="product_public_category_tree_gs" model="ir.ui.view">
+            <field name="name">product_public_category_tree_gs</field>
+            <field name="model">product.public.category</field>
+            <field name="inherit_id" ref="website_sale.product_public_category_tree_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">                    
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">0</attribute>
+                </xpath>
+                <xpath expr="//field[last()]" position="after">
+                    <field name="request_type" />
+                    <field name="delivery_ids" widget="many2many_tags"/>
+                </xpath>                
+            </field>
+        </record>
+        
+    </data>
+</odoo>

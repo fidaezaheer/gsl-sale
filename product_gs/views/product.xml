@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="product_template_form_view_gs" model="ir.ui.view">
+            <field name="name">product_template_form_view_gs</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view" />
+            <field name="arch" type="xml">
+                <field name="categ_id" position="after">
+                    <field name="typical_id" />
+                    <field name="project_id" />
+                    <field name="phase_id" />
+                    <field name="photo_id" />
+                    <field name="make_id" />
+                    <field name="model_id" />
+                    <field name="condition" />
+                    <field name="dimensions" />
+                    <field name="building" />
+                </field>
+            </field>
+        </record>
+        <record id="product_template_tree_view_image" model="ir.ui.view">
+            <field name="name">product_template_tree_view_image</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view" />
+            <field name="arch" type="xml">
+                <field name="default_code" position="before">
+                    <field string="Image" name="image_1920" widget="image" options="{'preview_image': 'image_128'}" />
+                </field>
+                <xpath expr="//field[last()]" position="after">
+                    <button name="action_image_change" string="Replace image" type="object" class="oe_highlight" />
+                </xpath>
+                <field name="name" position="after">
+                    <field name="typical_id" />
+                    <field name="phase_id" />
+                    <field name="make_id" optional="hide" />
+                    <field name="model_id" optional="hide" />
+                    <field name="condition" optional="hide" />
+                    <field name="dimensions" optional="hide" />
+                    <field name="building" optional="hide" />
+                </field>
+            </field>
+        </record>
+        
+        <record id="sale_order_line_view_form_editable" model="ir.ui.view">
+            <field name="name">sale_order_line_view_form_editable</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.sale_order_line_view_form_readonly" />
+            <field name="arch" type="xml">
+                <field name="product_id" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="order_id" position="attributes">
+                    <attribute name="required">0</attribute>
+                </field>
+                <field name="product_uom_qty" position="attributes">
+                    <attribute name="readonly"></attribute>
+                </field>
+                <field name="order_partner_id" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                    <attribute name="invisible">0</attribute>
+                    <attribute name="required">1</attribute>
+                </field>
+            </field>
+        </record> 
+        
+        <record id="view_phase_valuator" model="ir.ui.view">
+            <field name="name">view_phase_valuator</field>
+            <field name="model">product.template</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Product" multi_edit="1" edit="1" delete="0" create="0" editable="top">
+                    <field name="product_variant_count" invisible="1"/>
+                    <field name="default_code" optional="show"/>
+                    <field name="name"/>
+                    <field name="company_id" options="{'no_create_edit': True}" groups="base.group_multi_company" optional="hide"/>
+                    <field name="active" invisible="1"/>
+                    <field name="typical_id" />
+                    <field name="override_fmv" />
+                    <field name="typical_fmv" />
+                    <field name="override_uw" />
+                    <field name="typical_unit_weight" />
+                </tree>
+            </field>
+        </record>
+        <record id="item_report_list_view" model="ir.ui.view">
+            <field name="name">item_report_list_view</field>
+            <field name="model">product.product</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Product" edit="0" delete="0" create="0">
+                    <field name="name"/>
+                    <field name="donation_qty"/>
+                    <field name="resale_qty"/>
+                    <field name="relocate_qty"/>
+                    <field name="recycle_qty"/>
+                    <field name="landfill_qty"/>
+                    <field name="intake_qty"/>
+                    <field name="request_qty"/>
+                    <field name="delivered_qty"/>
+                    <field name="placed_qty"/>
+                    <field name="pending_request_qty"/>
+                    <field name="unrequest_qty"/>
+                    <field name="overflow_request_qty"/>
+                </tree>
+            </field>
+        </record>
+        <record id="product_template_search_gs" model="ir.ui.view">
+            <field name="name">product_template_search_gs</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.product_template_search_form_view_stock" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[last()]" position="after">
+                    <field name="phase_id" />
+                    <field name="project_id" />
+                    <field name="make_id" />
+                    <field name="model_id" />
+                    <field name="condition" />
+                </xpath>
+            </field>
+        </record>
+
+        
+        <record id="all_item_report" model="ir.actions.act_window">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Item Report</field>
+            <field name="res_model">product.product</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="domain"></field>
+            <field name="context"></field>
+            <field name="view_id" ref="product_gs.item_report_list_view" />
+        </record>
+        
+        <record id="menu_gs_all_item_report" model="ir.ui.menu" >
+            <field name="name">Item Report</field>
+            <field name="sequence" eval="1000" />
+            <field name="action" ref="all_item_report" />
+            <field name="parent_id" ref="menu_gs_inventory" />
+        </record>
+
+        
+        <record id="stock.product_template_action_product" model="ir.actions.act_window">
+            <field name="view_mode">tree,kanban,form</field>
+        </record>
+    </data>
+</odoo>

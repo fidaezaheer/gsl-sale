@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="action_los_report" model="ir.actions.client">
+            <field name="name">LOS Report</field>
+            <field name="tag">los_report</field>
+            <field name="context" eval="{'model': 'los.report'}" />
+        </record>
+        <record id="action_summary_report" model="ir.actions.client">
+            <field name="name">Summary Report</field>
+            <field name="tag">summary_report</field>
+            <field name="context" eval="{'model': 'summary.report'}" />
+        </record>
+        <record id="action_placement_report" model="ir.actions.client">
+            <field name="name">Placement Report</field>
+            <field name="tag">placement_report</field>
+            <field name="context" eval="{'model': 'placement.report'}" />
+        </record>
+
+        <record id="view_gs_project_phase_tree" model="ir.ui.view">
+            <field name="name">view_gs_project_phase_tree</field>
+            <field name="model">gs.project.phase</field>
+            <field name="type">tree</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <tree string="model_tree" >
+                    <field name="name" />
+                    <field name="project_id" />
+                    <field name="create_date" />
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Form view for "model" -->
+        <record id="view_gs_project_phase_form" model="ir.ui.view">
+            <field name="name">view_gs_project_phase_form</field>
+            <field name="model">gs.project.phase</field>
+            <field name="type">form</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <form string="model_form" >
+                    <header>
+                        <button name="action_print_pdp" string="Print PDP" type="object" class="oe_highlight" attrs="{'invisible': [('pdp_printed','!=',False)]}" />
+                        <button name="action_print_pdp" string="Reprint PDP" type="object" attrs="{'invisible': [('pdp_printed','=',False)]}" confirm="Do you want to reprint PDP report?" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(stock.product_template_action_product)d" string="Inventory" type="action" class="oe_stat_button" icon="fa-arrows-v" context="{'default_phase_id': id}" />
+                            <button name="%(action_gs_intake)d" string="Upload" type="action" class="oe_stat_button" icon="fa-arrows-v" context="{'default_phase_id': id}" />
+                            <button name="action_open_mailouts" string="Mailout" type="object" class="oe_stat_button" icon="fa-arrows-v" context="{'default_phase_id': id}" />
+                            <button name="action_open_requests" string="Request" type="object" class="oe_stat_button" icon="fa-arrows-v" context="{'default_from_phase_id': id}" />
+                            <button name="action_open_requestlines" string="Placement" type="object" class="oe_stat_button" icon="fa-arrows-v" context="{'default_from_phase_id': id}" />
+                            <button name="%(action_placement_report)d" string="Placement report" type="action" class="oe_stat_button" icon="fa-arrows-v" context="{'show_stock': True}" />
+                            <button name="%(action_placement_report)d" string="Selected Placement" type="action" class="oe_stat_button" icon="fa-arrows-v" context="{'selected': True}" />
+                            <button name="action_open_deliveries" string="Deliveries" type="object" class="oe_stat_button" icon="fa-arrows-v" />
+                            <button name="%(action_summary_report)d" string="Summary Report" type="action" class="oe_stat_button" icon="fa-arrows-v" />
+                            <button name="%(action_los_report)d" string="LOS" type="action" class="oe_stat_button" icon="fa-arrows-v" />
+                            <button name="action_open_itemreport" string="Item Report" type="object" class="oe_stat_button" icon="fa-arrows-v" />
+                            <button name="action_open_valuator" string="FMV/Wt Overide" type="object" class="oe_stat_button" icon="fa-arrows-v" />
+                            <button name="action_open_placements" string="Placements Pivot" type="object" class="oe_stat_button" icon="fa-arrows-v" context="{'show_stock': True}" />
+                        </div>    
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" />
+                            <h1>
+                                <field name="name" class="oe_inline" placeholder="name" />
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="project_id" />
+                            <field name="pdp_printed" invisible="1" />
+                        </group>
+                        
+                        <notebook>
+                            <page string="Basic Info" >
+                                <group>
+                                    <group>
+                                        <field name="phase_company_id" />
+                                        <field name="number" />
+                                        <field name="address" />
+                                        <field name="decom_start" />
+                                        <field name="decom_end" />
+                                    </group>
+                                    <group>
+                                        <field name="project_pm_lead_id" />
+                                        <field name="pc_lead_id" />
+                                        <field name="project_bdm" />
+                                        <field name="project_bdm2" />
+                                        <field name="portfolio" />
+                                    </group>
+                                    <group string="Total cubic feet" >
+                                        <field name="total_cubic_feet"/>
+                                        <field name="truck_count"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Disposition Goals" >
+                                <group>
+                                    <group string="Disposition Goals">
+                                        <field name="dg_donation" />
+                                        <field name="dg_resale" />
+                                        <field name="dg_relocate" />
+                                        <field name="dg_recycle" />
+                                        <field name="dg_landfill" />
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Scale Ticket Override">
+                                <group>
+                                    <group string="Value Overrides">
+                                        <field name="override_recycle" readonly="1" />
+                                        <field name="override_landfill" readonly="1" />
+                                    </group>
+                                    <group>
+                                        <button name="action_override" string="Overrides" type="object" class="oe_highlight" />  
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                    
+                </form>
+            </field>
+        </record>
+        
+        <!-- Search view for "model" -->
+        <record id="view_gs_project_phase_search" model="ir.ui.view">
+            <field name="name">view_gs_project_phase_search</field>
+            <field name="model">gs.project.phase</field>
+            <field name="type">search</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <search string="model_search">
+                    <field name="name"/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Main window action for "model" -->
+        <record id="action_gs_project_phase_act_window" model="ir.actions.act_window">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Phases</field>
+            <field name="res_model">gs.project.phase</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="domain">[]</field>
+            <field name="context">{"search_default_filter_no_proposals":True}</field>
+            <field name="search_view_id" ref="view_gs_project_phase_search" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add new GS Project Phase
+                </p><p>
+                </p>
+            </field>
+        </record>
+        
+        <!-- Main menu for "model" -->
+        <record id="menu_gs_project_phase" model="ir.ui.menu" >
+            <field name="name">Phases</field>
+            <field name="sequence" eval="1" />
+            <field name="action" ref="action_gs_project_phase_act_window" />
+            <field name="parent_id" ref="menu_gsop_operation" />
+        </record>
+        
+        <template id="report_assets_backend" name="report_assets_backend" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/product_gs/static/src/js/los_report.js"></script>
+                <script type="text/javascript" src="/product_gs/static/src/js/placement_report.js"></script>
+                <script type="text/javascript" src="/product_gs/static/src/js/summary_report.js"></script>
+            </xpath>
+       </template>
+       
+        <record id="phase_override_wizard" model="ir.ui.view">
+            <field name="name">phase_override_wizard</field>
+            <field name="model">gs.project.phase</field>
+            <field name="priority" eval="160" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="phase_override_wizard" create="false" delete="false" edit="true">
+                    <header></header>
+                    <group>
+                        <group string="Overrides">
+                            <field name="override_recycling_wood" />
+                            <field name="override_recycling_metal" />
+                            <field name="override_landfill" />                            
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="override_save" string="Save" type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

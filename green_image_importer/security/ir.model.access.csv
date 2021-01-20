@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_green_image_import_tmpl,access_green_image_import_tmpl,model_green_image_import_tmpl,base.group_user,1,0,0,0
+access_green_image_man,access_green_image_import_tmpl,model_green_image_import_tmpl,base.group_erp_manager,1,1,1,1
+access_green_message_wizard,access_green_message_wizard,model_green_message_wizard,base.group_user,1,0,0,0

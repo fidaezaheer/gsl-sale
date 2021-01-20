@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record forcecreate="True" id="typical_precision" model="decimal.precision">
+            <field name="name">Typicals value</field>
+            <field name="digits" eval="2"/>
+        </record>
+        <record forcecreate="True" id="typical_precision_unit_weight" model="decimal.precision">
+            <field name="name">Typicals value unit weight</field>
+            <field name="digits" eval="5"/>
+        </record>
+        <record forcecreate="True" id="summary_report_precision" model="decimal.precision">
+            <field name="name">Summary report value</field>
+            <field name="digits" eval="5"/>
+        </record>
+    </data>
+    <data noupdate="1">
+        <record id="disposition_donation" model="disposition.type" forcecreate="1">
+            <field name="name">Donation</field>
+            <field name="code">donation</field>
+            <field name="sequence">3</field>
+            <field name="manual_create" eval="False"/>
+        </record>
+        <record id="disposition_resale" model="disposition.type" forcecreate="1">
+            <field name="name">Resale</field>
+            <field name="code">resale</field>
+            <field name="sequence">1</field>
+            <field name="manual_create" eval="False"/>
+        </record>
+        <record id="disposition_relocate" model="disposition.type" forcecreate="1">
+            <field name="name">Relocate</field>
+            <field name="code">relocate</field>
+            <field name="sequence">2</field>
+            <field name="manual_create" eval="True"/>
+        </record>
+        <record id="disposition_recycle" model="disposition.type" forcecreate="1">
+            <field name="name">Recycle</field>
+            <field name="code">recycle</field>
+            <field name="sequence">4</field>
+            <field name="manual_create" eval="True"/>
+        </record>
+        <record id="disposition_landfill" model="disposition.type" forcecreate="1">
+            <field name="name">Landfill</field>
+            <field name="code">landfill</field>
+            <field name="sequence">5</field>
+            <field name="manual_create" eval="True"/>
+        </record>
+    </data>
+    <data>
+        <function model="ir.model.fields" name="formbuilder_whitelist">
+            <value>sale.order</value>
+            <value eval="[
+                'operating_hours', 'loading_dock', 'trailers', 'intend', 'preferred_delivery_date', 'offload'
+            ]"/>
+        </function>
+    </data>
+    <data>
+        <function model="ir.model.fields" name="formbuilder_whitelist">
+            <value>res.partner</value>
+            <value eval="[
+                'mobile', 'website', 'function'
+            ]"/>
+        </function>
+    </data>
+</odoo>

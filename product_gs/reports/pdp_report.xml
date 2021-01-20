@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- <report id="action_report_pdp_html" string="PDP Html" model="gs.project.phase" report_type="qweb-html" file="product_gs.pdp_report_main" name="product_gs.pdp_report_main" print_report_name="(object.name)" /> -->
+        <report id="action_report_pdp" string="PDP" model="gs.project.phase" menu="False" report_type="qweb-pdf" file="product_gs.pdp_report_main" name="product_gs.pdp_report_main" print_report_name="(object.name)" />
+        <template id="pdp_report_main">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="product_gs.pdp_report_template" />
+                </t>
+            </t>
+        </template>
+        <template id="pdp_report_template">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure" />
+                    <div align="left" id="informations" >
+                        <div t-if="doc.project_pm_lead_id">
+                            PM: <t t-esc="doc.project_pm_lead_id.name" /><br/>
+                            PM Contact No: <t t-esc="doc.project_pm_lead_id.phone" /><br/>
+                            PM Email: <t t-esc="doc.project_pm_lead_id.email" /><br/> <br/>
+                        </div>
+                        <div t-if="doc.pc_lead_id">
+                            PC: <t t-esc="doc.pc_lead_id.name" /><br/>
+                            PC Contact No: <t t-esc="doc.pc_lead_id.phone" /><br/>
+                            PC Email: <t t-esc="doc.pc_lead_id.email" /><br/>
+                        </div>
+                </div>
+                    <div align="center" >
+                        <h2>Project Disposition Plan</h2>
+                    </div>
+                    <div align="center" id="informations" >
+                        <strong >
+                            <span t-field="doc.project_id.name" />-
+                            <span t-field="doc.project_id.number" />-
+                            <span t-field="doc.name" />-
+                            <span t-field="doc.address" />
+                        </strong>
+                    </div>
+                    <br></br>
+                    <div align="left" id="informations" >
+                        <strong>Notes for Moving Team:</strong>
+                    </div>
+
+                    <ul style="list-style-type:square">
+                        <li>If Beneficiaries are not receiving everything on their PDP Inventory List, the Placement Coordinator needs to be notified BEFORE delivery </li>
+                        <li>
+                            <u>Tail-gate style offload instruction for all beneficiaries:</u>
+                            Offload to ground or onto dock. Beneficiary will provide volunteers to bring items inside/to their end location.
+                        </li>
+                    </ul>
+                    <div align="left" id="informations">
+                        <strong>Confirmed Delivery Schedule</strong>
+                    </div>
+                    <table class="table table-condensed table-bordered" style="width: 100%;" border="0" cellpadding="0" cellspacing="0" padding="0" margin="0">
+                        <!-- <table style="text-align: center; border-collapse: collapse; width: 100%;font-family:'Book Antiqua';padding=1; " border="1" cellpadding="0" cellspacing="0" padding="0" margin="2"> -->
+                        <thead>
+                            <th class="text-center" colspan="2">
+                                <bold>Disposition</bold>
+                                <br></br>
+                            </th>
+                            <th class="text-center" colspan="2">
+                                <bold>Beneficiary/Customer</bold>
+                                <br></br>
+                            </th>
+                            <th class="text-center" colspan="2">
+                                <bold>Delivery Date</bold>
+                                <br></br>
+                            </th>
+                            <th class="text-center" colspan="2">
+                                <bold>
+                                    Est. Time of Del.
+                                    <br> (3-hour window) </br>
+                                </bold>
+                            </th>
+                            <th class="text-center" colspan="2">
+                                <bold>Trucks</bold>
+                                <br></br>
+                            </th>
+                        </thead>
+
+                        <tbody>
+                            
+                            <t t-set="benficiary_serial" t-value="1" />                            
+                            <t t-foreach="orders" t-as="order">
+                                <t t-set="parent_id" t-value="order.partner_id.parent_id or order.partner_id" />
+                                <tr valign="top">
+                                    <td align="left" colspan="2">
+                                        <span t-field="order.disposition_type_id" />
+                                    </td>
+                                    <td align="left" colspan="2">
+                                        <t t-if="order.disposition_type_id.code in ('donation', 'resale', 'relocate')">
+                                            <t t-esc="benficiary_serial" />.
+                                            <t t-set="benficiary_serial" t-value="benficiary_serial+1" />                            
+                                        </t>
+                                        <span>
+                                            <t t-esc="parent_id.name" />
+                                        </span>
+                                    </td>
+                                    <td align="left" colspan="2">
+                                        <span></span>
+                                    </td>
+                                    <td align="left" colspan="2">
+                                        <span></span>
+                                    </td>
+                                    <td align="left" colspan="2">
+                                        <span></span>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <br></br>
+                    <div align="left" id="informations">
+                        <strong style="">Update Log</strong>
+                        <p>Date</p>
+                        <p></p>
+                    </div>
+                    <p style="page-break-after:always;"></p>
+                    <t t-set="benficiary_serial" t-value="1" />                            
+                    <t t-foreach="orders" t-as="order">
+                        <t t-if="order.disposition_type_id.code == 'donation'">
+                            <t t-call="product_gs.pdp_donation" />
+                        </t>
+                        <t t-if="order.disposition_type_id.code == 'resale'">
+                            <t t-call="product_gs.pdp_donation" />
+                        </t>
+                        <t t-if="order.disposition_type_id.code == 'relocate'">
+                            <t t-call="product_gs.pdp_donation" />
+                        </t>
+                        <t t-if="order.disposition_type_id.code == 'recycle'">
+                            <t t-call="product_gs.pdp_landfill" />
+                        </t>
+                        <t t-if="order.disposition_type_id.code == 'landfill'">
+                            <t t-call="product_gs.pdp_landfill" />
+                        </t>
+                        <t t-if="order.disposition_type_id.code in ('donation', 'resale', 'relocate')">
+                            <t t-set="benficiary_serial" t-value="benficiary_serial+1" />                            
+                        </t>
+                    </t>
+                    <t t-set="products" t-value="products.sort_by_photoid()"/>
+                    <t t-set="block" t-value="4"/>
+                    <t t-set="loops" t-value="ceil(len(products)/block)"/>
+                    <t t-foreach="range(loops)" t-as="n">
+                        <div class="row mb-5">
+                            <t t-foreach="products[n*block:(n+1)*block]" t-as="product">
+                                <div class="col-3 col-sm-3 col-md-3">
+                                    <div style="margin:auto; text-align:center;height:150px;overflow:hidden;">
+                                        <img t-att-src="image_data_uri(product.image_256)" style="max-height:145px;"  t-if="product.image_256"/>
+                                    </div>
+                                    <div style="height:40px; overflow:hidden; margin:auto; text-align: center;font-size:10px;line-height:12px;"> 
+                                            <t t-esc="product.photo_id_wo_ext"/>:<t t-esc="product.name[:30]"/>-Qty: <span t-field="product.intake_qty"/> 
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+        <template id="pdp_donation">
+            <t t-set="parent_id" t-value="order.partner_id.parent_id or order.partner_id" />
+            <div>
+                <div align="center" id="informations">
+                    <strong>
+                        <t t-if="order.disposition_type_id.code == 'donation'">Beneficiary</t>
+                        <t t-else="">Customer</t>
+                        #<t t-esc="benficiary_serial" />
+                        – 
+                        <span>
+                            <t t-esc="parent_id.name" />
+                        </span>
+        
+                    </strong>
+                </div>
+                <div align="left" id="informations">
+                    <strong>Contact Information</strong>
+                </div>
+                <table class="table table-condensed table-bordered" style="width: 100%;font-family:'Book Antiqua';font-size: 10pt;" border="0" cellpadding="0" cellspacing="0" padding="0" margin="0">
+                    <tbody>
+                        <tr valign="top">
+                            <td class="text-left" style="font-family:'Book Antiqua';font-size: 10pt;" colspan="3">
+                                <strong>Organization Name: </strong>
+                                <span>
+                                    <t t-esc="parent_id.name" />
+                                </span>
+                                <br/>
+                            </td>
+                        </tr>
+
+                        <tr valign="top">
+                            <td align="left" style="font-family:'Book Antiqua';font-size: 10pt;" colspan="2">
+                                <span>
+                                    <strong>Name (Primary Contact): </strong>
+                                    <span t-field="order.partner_id.name" />
+                                </span>
+                            </td>
+                            <td align="left" style="font-family:'Book Antiqua';font-size: 10pt;">
+                                <span>
+                                    <strong>Title: </strong>
+                                    <span t-field="order.partner_id.title" />
+                                </span>
+                            </td>
+
+                        </tr>
+
+                        <tr valign="top">
+                            <td align="left" style="font-family:'Book Antiqua';font-size: 10pt;">
+                                <span>
+                                    <strong>Mobile Phone: </strong>
+                                    <span t-field="order.partner_id.mobile" />
+                                </span>
+                            </td>
+                            <td align="left" style="font-family:'Book Antiqua';font-size: 10pt;">
+                                <span>
+                                    <strong>Office Phone: </strong>
+                                    <span t-field="order.partner_id.phone" />
+                                </span>
+                            </td>
+                            <td align="left" style="font-family:'Book Antiqua';font-size: 10pt;" colspan="2">
+                                <span>
+                                    <strong>Email: </strong>
+                                    <span t-field="order.partner_id.email" />
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br></br>
+
+                <div align="left" id="informations">
+                    <strong>Delivery Site Information</strong>
+                </div>
+                <table class="table table-condensed table-bordered" style="width: 100%;font-family:'Book Antiqua';font-size: 10pt;" border="0" cellpadding="0" cellspacing="0" padding="0" margin="0">
+                    <tbody>
+                        <tr valign="top">
+                            <td class="text-left" colspan="4">
+                                <strong>Street Address: </strong>
+                                <span t-field="order.partner_shipping_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}" />
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td align="left" colspan="1" style="font-family:'Calibri';font-size: 10pt">
+                                <span>
+                                    <strong>Loading Dock: </strong>
+                                        <t t-if="order.loading_dock == 'yes'">&#9745;</t>
+                                        <t t-else="">&#9744;</t>Yes
+                                        <t t-if="order.loading_dock == 'no'">&#9745;</t>
+                                        <t t-else="">&#9744;</t>No
+                                </span>
+                            </td>
+                            <td align="left" colspan="2" style="font-family:'Calibri';font-size: 10pt">
+                                <span>
+                                    <strong>Can Accept ’53 Trailers: </strong>
+                                    <t t-if="order.trailers == 'yes'">&#9745;</t>
+                                    <t t-else="">&#9744;</t>Yes
+                                    <t t-if="order.trailers == 'no'">&#9745;</t>
+                                    <t t-else="">&#9744;</t>No
+                                </span>
+                            </td>
+                            <td align="left" colspan="1" style="font-family:'Calibri';font-size: 10pt">
+                                <span>
+                                    <strong>Delivery type: </strong>
+                                        <t t-if="order.carrier_id.name == 'Delivery'">&#9745;</t>
+                                        <t t-else="">&#9744;</t>Delivery
+                                        <t t-if="order.carrier_id.name == 'Pick-up'">&#9745;</t>
+                                        <t t-else="">&#9744;</t>Pick-up
+                                </span>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td align="left" colspan="4">
+                                <span>
+                                    <strong>Please describe offloading environment: </strong>
+                                </span>
+                                <ul style="list-style-type:star" t-if="order.offload">
+                                    <t t-foreach="order.offload.split('\n')" t-as="line">
+                                        <li>
+                                            <span>
+                                                <t t-esc="line" />
+                                            </span>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </td>
+                        </tr>
+
+                        <tr valign="top">
+                            <td align="left" colspan="4">
+                                <span>
+                                    <mark>Beneficiary understands that delivery of assets includes a tailgate offload only, and that it is the obligation of the Beneficiary to provide 4-10 able-bodied staff or volunteers to transport all assets in to the Beneficiary’s facility.</mark>
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr valign="top">
+                            <td align="left" colspan="1">
+                                <span>
+                                    <strong>
+                                        Expected Delivery Date:
+                                    </strong>
+                                    <br/>
+                                    <span t-field="order.expected_delivery_date" />
+                                </span>
+                            </td>
+                            <td align="left" colspan="2">
+                                <span>
+                                    <strong>Preferred Delivery Date:  </strong>
+                                    <br/>
+                                    <span t-field="order.preferred_delivery_date" />
+                                </span>
+                            </td>
+                            <td align="left" colspan="1">
+                                <span>
+                                    <strong>Operating Hours: </strong>
+                                    <br/>
+                                    <span t-field="order.operating_hours" />
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <t t-call="product_gs.pdp_inventory_list" />
+            </div>
+            <p style="page-break-after:always;"></p>
+        </template>
+
+        <template id="pdp_landfill">
+            <t t-set="parent_id" t-value="order.partner_id.parent_id or order.partner_id" />
+            <div>
+                <div align="center" id="informations">
+                    <strong>
+                        <span>
+                            <t t-esc="parent_id.name" />
+                        </span>
+                    </strong>
+                </div>
+
+
+                <div align="left" id="informations">
+                    <strong>Contact Information</strong>
+                </div>
+                <table class="table table-condensed table-bordered" style="width: 100%;font-family:'Book Antiqua';font-size: 10pt;" border="0" cellpadding="0" cellspacing="0" padding="0" margin="0">
+                    <!-- <table style="text-align: center; borderx-collapse: collapse; width: 100%;font-family:'Book Antiqua';padding=1; " border="1" cellpadding="0" cellspacing="0" padding="0" margin="2"> -->
+                    <tbody>
+                        <tr valign="top">
+                            <td class="text-left" style="font-family:'Book Antiqua';font-size: 10pt;">
+                                <span>
+                                    <strong>Organization Name: </strong>
+                                    <span t-field="parent_id.name" />
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr valign="top">
+                            <td class="text-left" style="font-family:'Book Antiqua';font-size: 10pt;">
+                                <span>
+                                    <strong>Office Phone: </strong>
+                                    <span t-field="parent_id.phone" />
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br></br>
+
+
+                <div align="left" id="informations">
+                    <strong>Delivery Site Information</strong>
+                </div>
+                <table class="table table-condensed table-bordered" style="width: 100%;font-family:'Book Antiqua';font-size: 10pt;" border="0" cellpadding="0" cellspacing="0" padding="0" margin="0">
+                    <tbody>
+
+                        <tr valign="top">
+                            <td align="left" style="font-family:'Book Antiqua';font-size: 10pt;">
+                                <strong>Street Address: </strong>
+                                <span t-field="order.partner_shipping_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}" />
+                            </td>
+                        </tr>
+
+
+                        <tr valign="top">
+                            <td align="left" style="font-family:'Calibri';font-size: 10pt;">
+                                <span>
+                                    <strong>Notes:</strong>
+                                </span>
+                                <ul t-if="order.note" >
+                                    <t t-foreach="order.note.split('\n')" t-as="line">
+                                        <li>
+                                            <span>
+                                                <t t-esc="line" />
+                                            </span>
+                                        </li>
+                                    </t>
+                                </ul>
+
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td align="left" style="font-family:'Calibri';font-size: 10pt;">
+                                <span>
+                                    <strong>Operating Hours:</strong>
+                                    <br>
+                                        <span t-field="order.operating_hours" />
+                                    </br>
+                                </span>
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+                <br></br>
+                <t t-call="product_gs.pdp_inventory_list" />                
+            </div>
+            <p style="page-break-after:always;"></p>
+        </template>
+        <template id="pdp_inventory_list">
+            <div align="left" id="informations">
+                <strong>Appendix A: Inventory List</strong>
+            </div>
+            <t t-set="location_column" t-value="any(order.order_line.filtered('product_uom_qty').mapped('product_id').mapped('building'))" />
+            <table class="table table-condensed table-bordered" style="width: 100%;font-family:'Book Antiqua';font-size: 10pt;" border="0" cellpadding="0" cellspacing="0" padding="0" margin="0">
+                <thead>
+                    <th class="text-center" style="font-family:'Calibri';font-size: 10pt;">
+                        <bold>Pic #</bold>
+                    </th>
+                    <th class="text-center" style="font-family:'Calibri';font-size: 10pt;">
+                        <bold>Item</bold>
+                    </th>
+                    <th class="text-center" style="font-family:'Calibri';font-size: 10pt;" t-if="location_column">
+                        <bold>Building Location</bold>
+                    </th>
+                    <th class="text-center" style="font-family:'Calibri';font-size: 10pt;">
+                        <bold>
+                            Quantity
+                            <br> (plan)</br>
+                        </bold>
+                    </th>
+                    <th class="text-center" style="font-family:'Calibri';font-size: 10pt;">
+                        <bold>
+                            Quantity
+                            <br> (actual)</br>
+                        </bold>
+                    </th>
+                </thead>
+
+                <tbody>
+                    
+                    <t t-foreach="order.order_line" t-as="line">
+                        <t t-if="not line.is_delivery and line.product_uom_qty > 0">                        
+                            <tr valign="top">
+                                <td align="left" style="font-family:'Calibri';font-size: 10pt;">
+                                    <span>&#160;&#160; <t t-esc="line.product_id.photo_id_wo_ext" /></span>
+                                </td>
+                                <td align="left" style="font-family:'Calibri';font-size: 10pt;">
+                                    <span>&#160;&#160; <t t-esc="line.name" /></span>
+                                </td>
+                                <td align="left" style="font-family:'Calibri';font-size: 10pt;" t-if="location_column">
+                                    <span>&#160;&#160; <t t-esc="line.product_id.building" /></span>
+                                </td>
+                                <td align="right" style="font-family:'Calibri';font-size: 10pt;">
+                                    <span t-field="line.product_uom_qty" />
+                                </td>
+                                <td align="right" style="font-family:'Calibri';font-size: 10pt;">
+                                    <span></span>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </tbody>
+            </table>
+        </template>
+    </data>
+</odoo>

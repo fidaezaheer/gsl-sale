@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="losReport.buttons">
+        <button type="button" class="btn btn-primary los-download-excel">Download</button>
+    </t>    
+</templates>

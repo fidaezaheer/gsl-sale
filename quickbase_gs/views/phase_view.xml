@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_gs_project_phase_form_inherit" model="ir.ui.view">
+            <field name="name">gs.project.phase.inherit.qb.gsop</field>
+            <field name="model">gs.project.phase</field>
+            <field name="inherit_id" ref="product_gs.view_gs_project_phase_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='decom_end']" position="after">
+                    <field name="qb_account_name" readonly="True"/>
+                    <field name="qb_id" readonly="True"/>
+                    <field name="quote_date" readonly="True"/>
+                    <field name="qb_report_id" readonly="True"/>
+                </xpath>
+                <xpath expr="//field[@name='portfolio']" position="after">
+                    <field name="stream_id"/>
+                    <field name="proposals_only"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_gs_project_phase_search_inherit" model="ir.ui.view">
+            <field name="name">view_gs_project_phase_search_inherit</field>
+            <field name="model">gs.project.phase</field>
+            <field name="inherit_id" ref="product_gs.view_gs_project_phase_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <separator/>
+                    <filter string="Phase-Only Inventory" name="filter_no_proposals" domain="[('proposals_only','=',False)]"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

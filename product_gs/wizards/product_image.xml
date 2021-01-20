@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="product_image_change" model="ir.ui.view">
+            <field name="name">product_image_change</field>
+            <field name="model">product.image.change</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header></header>
+                    <group>
+                        <field name="product_id" />
+                        <field name="image_1920" widget="image" options="{'preview_image': 'image_128'}"/>
+                    </group>
+                    <footer>
+                        <button name="save" string="Save" type="object" class="oe_highlight"/>
+                        <button special="cancel" string="Discard" />
+                    </footer>
+                </form>                
+            </field>
+        </record>
+    </data>
+</odoo>

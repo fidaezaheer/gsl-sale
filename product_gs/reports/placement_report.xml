@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <template id="placement_report_base">
+            <div class="container-fluid o_stock_reports_page o_stock_reports_no_print">
+                <span class="o_report_heading text-center"><h1>Placement</h1></span>
+                <span><t t-esc="context"/></span>
+                <div class="o_stock_reports_table table-responsive">
+                    <t t-set="pc" t-value="len(partners)*2"/>
+                    <table class="table" border="1">
+                        <colgroup>
+                            <col/>
+                            <col style="background-color:#FAD7A0" span="2" />
+                            <t t-set="toggle_style" t-value="True" />
+                            <t t-foreach="partners" t-as="partner">
+                                <t t-set="toggle_style" t-value="not toggle_style" />
+                                <col t-attf-style="#{'background-color:#F2F3F4;' if toggle_style else None}" span="2" />
+                            </t>
+                        </colgroup>
+                        <thead>
+                            <tr class="o_report_header">
+                                <th class="o_report_line_header"></th>
+                                <th class="o_report_line_header text-center" colspan="2">Total</th>
+                                <th class="o_report_line_header text-left" t-att-colspan="pc">Beneficiaries</th>
+                            </tr>
+                            <tr class="o_report_header">
+                                <th class="o_report_line_header" >Item</th>
+                                <!-- <th class="o_report_line_header" >Initial</th> -->
+                                <th class="o_report_line_header" >Available Qty</th>
+                                <th class="o_report_line_header" >Quantity to approve</th>
+                                <!-- <th class="o_report_line_header" >Reserved</th> -->
+                                <!-- <th class="o_report_line_header" >Delivered</th> -->
+                                <t t-foreach="partners" t-as="partner">
+                                    <th class="o_report_line_header text-center" colspan="2" >
+                                        <t t-esc="partner[0].name" />
+                                        (<t t-esc="partner[1]" />)
+                                    </th>
+                                </t>
+                            </tr>
+                            <tr class="o_report_header">
+                                <th class="o_report_line_header" ></th>
+                                <th class="o_report_line_header" ></th>
+                                <th class="o_report_line_header" ></th>
+                                <t t-foreach="partners" t-as="partner">
+                                    <th class="o_report_line_header">Requested</th>
+                                    <th class="o_report_line_header">Quantity to approve</th>
+                                    <!-- <th class="o_report_line_header">Delivered</th> -->
+                                </t>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="lines" t-as="line">
+                                <tr t-attf-bgcolor="#{'#03EC46' if line['item'].virtual_available == 0 else None}">
+                                    <td>
+                                        <span t-field="line['item'].display_name" />
+                                    </td>                                        
+                                    <t t-foreach="line['data']" t-as="qty">
+                                        <td>
+                                            <t t-esc="qty" />
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- <template id="product_price" name="product_price" inherit_id="website_sale.product_price">
+            <div position="attributes">
+                <attribute name="style">display:none;</attribute>
+            </div>
+        </template> -->
+        <template id="product" name="product" inherit_id="website_sale.product">
+            <xpath expr="//a[@t-att-href='keep(category=0)']" position="replace">
+                <a href="#" >Products</a>
+            </xpath>
+            <!-- <xpath expr="//t[@t-call='website_sale.product_price']" position="after">
+                <ul class="list-unstyled">
+                    <li class="variant_attribute" t-if="category and category.request_type == 'resale'">
+                        <strong class="attribute_name">Proposed Price (Bid in <span><t t-esc="website.currency_id.symbol" /></span>)</strong> 
+                        <input type="number" name="resale_donation" step=".5" min="0" class="form-control col-md-6" placeholder="Resale value" required="True" value="0" />
+                        <input type="hidden" name="type" value="resale" />
+                    </li>
+                    <li class="variant_attribute" t-if="category and category.request_type == 'donation'">
+                        <strong class="attribute_name">Donation</strong>
+                        <input type="hidden" name="resale_donation" value="0" />
+                        <input type="hidden" name="type" value="donation" />
+                    </li>
+                </ul>
+            </xpath> -->
+            <xpath expr="//h1[@t-field='product.name']" position="before">
+                <span t-field="product.default_code" />
+            </xpath>
+            <xpath expr="//section/div/div/p[hasclass('text-muted')]" position="attributes">
+                <attribute name="style">display: none;</attribute>
+            </xpath>
+            <!-- <xpath expr="//div[hasclass('js_main_product')]" position="inside">
+                <div class="text-success mt16">
+                    <h3>
+                        <span>Available quantity: </span>
+                        <span t-field="product_variant.intake_qty" />
+                    </h3>
+                </div>
+            </xpath> -->
+        </template>
+        <template inherit_id="website_sale.products_item" id="products_item">
+            <!-- <xpath expr="//div[hasclass('product_price')]" position="attributes">
+                <attribute name="style">display: none;</attribute>
+            </xpath> -->
+            
+            <xpath expr="//a[@t-att-content='product.name']" position="replace">
+                <a itemprop="name" t-att-href="product_href" t-attf-content="#{'%s-%s'%(product.default_code,product.name)}" >
+                    <t t-esc="'[%s] %s'%(product.default_code,product.name)" />
+                </a>
+            </xpath>
+        </template>
+        <template inherit_id="website_sale.cart" id="cart" >
+            <xpath expr="//div[1]/div[1]" position="before">
+                <t t-set="mailout_visited" t-value="request.session.get('mailout_visited', False)" />
+                <t t-set="mailout" t-value="request.env['product.public.category'].browse(mailout_visited)" />
+            </xpath>
+            <xpath expr="//a[@href='/shop']" position="attributes">                
+                <attribute name="t-att-href"></attribute>
+                <attribute name="t-attf-href">/shop#{'/category/%s'%slug(mailout) if mailout_visited else None}</attribute>
+            </xpath>
+            <xpath expr="//a[@href='/shop']" position="attributes">                
+                <attribute name="t-att-href"></attribute>
+                <attribute name="t-attf-href">/shop#{'/category/%s'%slug(mailout) if mailout_visited else None}</attribute>
+            </xpath>
+        </template>
+        <template id="assets_frontend" inherit_id="website.assets_frontend" name="Shop">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/product_gs/static/src/js/delivery.js"></script>
+                <script type="text/javascript" src="/product_gs/static/src/js/website_sale_gs.js"></script>
+                <!-- <link rel="stylesheet" type="text/scss" href="/website_sale_delivery/static/src/scss/website_sale_delivery.scss"/> -->
+            </xpath>
+        </template>
+        <template id="extra_info" inherit_id="website_sale.extra_info" name="Checkout Extra Info">
+            <xpath expr="//form" position="replace">
+                <form action="/website_form/" method="post" class="s_website_form container-fluid" enctype="multipart/form-data" data-force_action="shop.sale.order" data-model_name="sale.order" data-success_page="/shop/payment">
+                    <div class="form-group row form-field">
+                        <div class="col-lg-6 col-md-4 text-md-right">
+                            <label class="col-form-label" for="operating_hours">What are your hours of operation?</label>
+                        </div>
+                        <div class="col-lg-6 col-md-8">
+                            <input type="text" class="form-control o_website_form_input" name="operating_hours" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group row form-field o_website_form_custom">
+                        <div class="col-lg-6 col-md-4 text-md-right">
+                            <label class="col-form-label" for="loading_dock">Does the building have a loading dock?</label>
+                        </div>
+                        <div class="col-lg-6 col-md-8">
+                            <select name="loading_dock" class="form-control o_website_form_input" data-init="1" >
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row form-field o_website_form_custom">
+                        <div class="col-lg-6 col-md-4 text-md-right">
+                            <label class="col-form-label" for="trailers">Can the driveway fit a 53’ Trailer?</label>
+                        </div>
+                        <div class="col-lg-6 col-md-8">
+                            <select name="trailers" class="form-control o_website_form_input" data-init="1" >
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row form-field">
+                        <div class="col-lg-6 col-md-4 text-md-right">
+                            <label class="col-form-label" for="intend">What do you intend to use this furniture for?</label>
+                        </div>
+                        <div class="col-lg-6 col-md-8">
+                            <input type="text" class="form-control o_website_form_input" name="intend" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group row form-field">
+                        <div class="col-lg-6 col-md-4 text-md-right">
+                            <label class="col-form-label" for="preferred_delivery_date">Are there any dates you are unavailable for delivery in the next 2 weeks?</label>
+                        </div>
+                        <div class="col-lg-6 col-md-8">
+                            <input type="text" class="form-control o_website_form_input" name="preferred_delivery_date"/>
+                        </div>
+                    </div>
+                    <div class="form-group row form-field">
+                        <div class="col-lg-6 col-md-4 text-md-right">
+                            <label class="col-form-label" for="offload">Special instructions for the delivery driver</label>
+                        </div>
+                        <div class="col-lg-6 col-md-8">
+                            <input type="text" class="form-control o_website_form_input" name="offload"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-6 col-md-4">
+                        </div>
+                        <div class="col-lg-6 col-md-8">
+                            <a role="button" href="/shop/checkout" class="btn btn-secondary mb32 float-left"><span class="fa fa-chevron-left" /> Previous</a>
+                            <a role="button" class="btn btn-primary float-right mb32 o_website_form_send" href="/shop/confirm_order">Next <span class="fa fa-chevron-right" /></a>
+                        </div>
+                    </div>
+                </form>
+            </xpath>
+        </template>
+        <template id="address" inherit_id="website_sale.address" name="Address Management">
+            
+            <!-- <xpath expr="//div[hasclass('oe_website_sale')]/div[2]/div" position="replace">
+                <div class="col-12 order-xl-2 d-none d-xl-block">
+                    <t t-call="website_sale.cart_summary">
+                        <t t-set="redirect">/shop/address</t>
+                    </t>
+                </div>        
+            </xpath> -->
+            
+            <xpath expr="//form[@action='/shop/address']" position="replace">
+                <form action="/shop/address" method="post" class="checkout_autoformat">                    
+                    <div class="form-row">                        
+                        <div t-attf-class="form-group #{error.get('name') and 'o_has_error' or ''} col-lg-12 div_name">
+                            <label class="col-form-label" for="name">Name</label>
+                            <input type="text" name="name" t-attf-class="form-control #{error.get('name') and 'is-invalid' or ''}" t-att-value="'name' in checkout and checkout['name']" />
+                        </div>
+                        
+                        <t t-if="website_sale_order.disposition_type_id.code == 'donation'">
+                            <div class="w-100"/>
+                            <div t-attf-class="form-group #{error.get('function') and 'o_has_error' or ''} col-lg-12 div_function">
+                                <label class="col-form-label" for="function">Job Title</label>
+                                <input type="text" name="function" t-attf-class="form-control #{error.get('function') and 'is-invalid' or ''}" t-att-value="'function' in checkout and checkout['function']" />
+                            </div>
+                        </t>
+                        
+        
+                        <div class="w-100"/>
+                        <t t-if="mode[1] == 'billing'">
+                            <div t-attf-class="form-group #{error.get('email') and 'o_has_error' or ''} col-lg-6" id="div_email">
+                                <label class="col-form-label" for="email">Email</label>
+                                <input type="email" name="email" t-attf-class="form-control #{error.get('email') and 'is-invalid' or ''}" t-att-value="'email' in checkout and checkout['email']" />
+                            </div>
+                        </t>
+                        
+                        <t t-if="website_sale_order.disposition_type_id.code == 'donation'">
+                            <div t-attf-class="form-group #{error.get('mobile') and 'o_has_error' or ''} col-lg-6" id="div_phone">
+                                <label class="col-form-label" for="mobile">Direct Line or Mobile Number</label>
+                                <input type="tel" name="mobile" t-attf-class="form-control #{error.get('mobile') and 'is-invalid' or ''}" t-att-value="'mobile' in checkout and checkout['mobile']" />
+                            </div>
+                        </t>
+                        
+                        <t>
+                            <div class="w-100"/>
+                            <div t-attf-class="form-group #{error.get('company_name') and 'o_has_error' or ''} col-lg-6">
+                                <label class="col-form-label" for="company_name">Organization Name</label>
+                                <input type="text" name="company_name" t-attf-class="form-control #{error.get('company_name') and 'is-invalid' or ''}" t-att-value="'commercial_company_name' in checkout and checkout['commercial_company_name'] or 'company_name' in checkout and checkout['company_name']" t-att-readonly="'1' if 'vat' in checkout and checkout['vat'] and not can_edit_vat else None" t-att-title="'Changing company name is not allowed once document(s) have been issued for your account. Please contact us directly for this operation.' if 'vat' in checkout and checkout['vat'] and not can_edit_vat else None" />
+                            </div>
+                            <div t-attf-class="form-group #{error.get('phone') and 'o_has_error' or ''} col-lg-6">
+                                <label class="col-form-label" for="phone">Organization Phone</label>
+                                <input type="text" name="phone" t-attf-class="form-control #{error.get('phone') and 'is-invalid' or ''}" t-att-value="'phone' in checkout and checkout['phone']" />
+                            </div>
+                            <t t-if="website_sale_order.disposition_type_id.code == 'donation'">
+                                <div class="w-100"/>
+                                <div t-attf-class="form-group #{error.get('vat') and 'o_has_error' or ''} col-lg-12 div_vat">
+                                    <label class="col-form-label" for="vat">Charitable Registration Number (CANADIAN) or EIN/Federal Tax ID (US)</label>
+                                    <input type="text" name="vat" t-attf-class="form-control #{error.get('vat') and 'is-invalid' or ''}" t-att-value="'vat' in checkout and checkout['vat']" t-att-readonly="'1' if 'vat' in checkout and checkout['vat'] and not can_edit_vat else None" t-att-title="'Changing VAT number is not allowed once document(s) have been issued for your account. Please contact us directly for this operation.' if 'vat' in checkout and checkout['vat'] and not can_edit_vat else None" />
+                                </div>
+                                <div class="w-100"/>
+                                <div t-attf-class="form-group #{error.get('website') and 'o_has_error' or ''} col-lg-12">
+                                    <label class="col-form-label" for="website">Organization Website</label>
+                                    <input type="text" name="website" t-attf-class="form-control #{error.get('website') and 'is-invalid' or ''}" t-att-value="'website' in checkout and checkout['website']" />
+                                </div>
+                            </t>
+                        </t>
+            
+                        <div class="w-100"/>
+                        <div t-attf-class="form-group #{error.get('street') and 'o_has_error' or ''} col-lg-12 div_street">
+                            <label class="col-form-label" for="street">Street <span class="d-none d-md-inline"> and Number</span></label>
+                            <input type="text" name="street" t-attf-class="form-control #{error.get('street') and 'is-invalid' or ''}" t-att-value="'street' in checkout and checkout['street']" />
+                        </div>
+                        <div t-attf-class="form-group #{error.get('street2') and 'o_has_error' or ''} col-lg-12 div_street2">
+                            <label class="col-form-label label-optional" for="street2">Street 2</label>
+                            <input type="text" name="street2" t-attf-class="form-control #{error.get('street2') and 'is-invalid' or ''}" t-att-value="'street2' in checkout and checkout['street2']" />
+                        </div>
+                        <div class="w-100"/>
+                        <t t-set='zip_city' t-value='country and [x for x in country.get_address_fields() if x in ["zip", "city"]] or ["city", "zip"]'/>
+                        <t t-if="'zip' in zip_city and zip_city.index('zip') &lt; zip_city.index('city')">
+                            <div t-attf-class="form-group #{error.get('zip') and 'o_has_error' or ''} col-md-4 div_zip">
+                                <label class="col-form-label label-optional" for="zip">Postal code/Zip code</label>
+                                <input type="text" name="zip" t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''}" t-att-value="'zip' in checkout and checkout['zip']" />
+                            </div>
+                        </t>
+                        <div t-attf-class="form-group #{error.get('city') and 'o_has_error' or ''} col-md-8 div_city">
+                            <label class="col-form-label" for="city">City</label>
+                            <input type="text" name="city" t-attf-class="form-control #{error.get('city') and 'is-invalid' or ''}" t-att-value="'city' in checkout and checkout['city']" />
+                        </div>
+                        <t t-if="'zip' in zip_city and zip_city.index('zip') &gt; zip_city.index('city')">
+                            <div t-attf-class="form-group #{error.get('zip') and 'o_has_error' or ''} col-md-4 div_zip">
+                                <label class="col-form-label" for="zip">Postal code/Zip code</label>
+                                <input type="text" name="zip" t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''}" t-att-value="'zip' in checkout and checkout['zip']" />
+                            </div>
+                        </t>
+                        <div class="w-100"/>
+                        <div t-attf-class="form-group #{error.get('country_id') and 'o_has_error' or ''} col-lg-6 div_country">
+                            <label class="col-form-label" for="country_id">Country</label>
+                            <select id="country_id" name="country_id" t-attf-class="form-control #{error.get('country_id') and 'is-invalid' or ''}" t-att-mode="mode[1]">
+                                <option value="">Country...</option>
+                                <t t-foreach="countries" t-as="c">
+                                    <option t-att-value="c.id" t-att-selected="c.id == (country and country.id or -1)">
+                                        <t t-esc="c.name" />
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <div t-attf-class="form-group #{error.get('state_id') and 'o_has_error' or ''} col-lg-6 div_state" t-att-style="(not country or not country.state_ids) and 'display: none'">
+                            <label class="col-form-label" for="state_id">State / Province</label>
+                            <select name="state_id" t-attf-class="form-control #{error.get('state_id') and 'is-invalid' or ''}" data-init="1">
+                                <option value="">State / Province...</option>
+                                <t t-foreach="country and country.state_ids or []" t-as="s">
+                                    <option t-att-value="s.id" t-att-selected="s.id == ('state_id' in checkout and country and checkout['state_id'] != '' and int(checkout['state_id']))">
+                                        <t t-esc="s.name" />
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="w-100"/>
+                        <t t-if="mode == ('new', 'billing') and not only_services">
+                            <div class="col-lg-12">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" id='shipping_use_same' class="mr8" name='use_same' value="1" checked='checked'/>Ship to the same address
+                                    <span class='ship_to_other text-muted' style="display: none">&amp;nbsp;(<i>Your shipping address will be requested later) </i></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+                    <input type="hidden" name="submitted" value="1" />
+                    <input type="hidden" name="partner_id" t-att-value="partner_id or '0'" />
+                    <input type="hidden" name="callback" t-att-value="callback" />
+                    <!-- Example -->
+                    <input type="hidden" name="field_required" t-att-value="'phone,name,function,email,company_name,vat,street,zip,country_id,mobile,website'" t-if="website_sale_order.disposition_type_id.code == 'donation'" />
+                    <input type="hidden" name="field_required" t-att-value="'phone,name,email,company_name,street,zip,country_id'" t-if="website_sale_order.disposition_type_id.code == 'resale'" />
+
+                    <div class="d-flex justify-content-between">
+                        <a role="button" t-att-href="mode == ('new', 'billing') and '/shop/cart' or '/shop/checkout'" class="btn btn-secondary mb32">
+                            <i class="fa fa-chevron-left"/>
+                            <span>Back</span>
+                        </a>
+                        <a role="button" href="#" class="btn btn-primary mb32 a-submit a-submit-disable a-submit-loading">
+                            <span>Next</span>
+                            <i class="fa fa-chevron-right"/>
+                        </a>
+                    </div>
+                </form>
+            </xpath>
+        </template>
+        <!-- <template id="total" inherit_id="website_sale.total">
+            <xpath expr="//tr[@id='order_total_taxes']" position="replace" />
+            <xpath expr="//tr[@id='order_total_untaxed']" position="replace" />
+            <xpath expr="//tr[@id='order_total']" position="attributes">
+                <attribute name="t-if">website_sale_order.disposition_type_id.code != 'donation'</attribute>
+            </xpath>
+        </template>
+        <template id="cart_summary" inherit_id="website_sale.cart_summary">
+            <xpath expr="//div[hasclass('toggle_summary_div')]//th[last()]" position="after">
+                <th class="border-top-0 text-center td-price" t-if="website_sale_order.disposition_type_id.code != 'donation'">Subtotal</th>
+            </xpath>
+            <xpath expr="//div[hasclass('toggle_summary_div')]//td[last()]" position="after">
+                <td class="text-center td-price" t-if="website_sale_order.disposition_type_id.code != 'donation'">
+                    <span t-field="line.price_subtotal" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" />
+                </td>
+            </xpath>
+            <xpath expr="//div[hasclass('toggle_summary_div')]" position="attributes">
+                <attribute name="class">d-none d-xl-block</attribute>
+            </xpath>
+            <xpath expr="//th[hasclass('td-price')]" position="attributes">
+                <attribute name="t-if">website_sale_order.disposition_type_id.code != 'donation'</attribute>
+            </xpath>
+            <xpath expr="//td[hasclass('td-price')]" position="attributes">
+                <attribute name="t-if">website_sale_order.disposition_type_id.code != 'donation'</attribute>
+            </xpath>
+        </template> -->
+        <!-- <template id="cart_lines" inherit_id="website_sale.cart_lines">
+            <xpath expr="//th[hasclass('td-price')]" position="attributes">
+                <attribute name="t-if">website_sale_order.disposition_type_id.code != 'donation'</attribute>
+            </xpath>
+            <xpath expr="//td[hasclass('td-price')]" position="attributes">
+                <attribute name="t-if">website_sale_order.disposition_type_id.code != 'donation'</attribute>
+            </xpath>
+        </template> -->
+        <template id="checkout" inherit_id="website_sale.checkout">
+            <xpath expr="//h3[hasclass('o_page_header')][1]" position="replace">
+                <h3 class="o_page_header mt8" t-if="website_sale_order.disposition_type_id.code != 'donation'">Billing Address</h3>
+                <h3 class="o_page_header mt8" t-if="website_sale_order.disposition_type_id.code == 'donation'">Address</h3>
+            </xpath>
+        </template>
+        <template id="frontend_layout_disable_brand_promotion" inherit_id="web.frontend_layout">
+            <xpath expr="//t[@t-call='web.brand_promotion']" position="attributes">
+                <attribute name="t-if">False</attribute>
+            </xpath>
+        </template>
+        <template id="sort_ref" inherit_id="website_sale.sort">
+            <xpath expr="//t[@t-set='name_desc_label']" position="after">
+                <t t-set="ref_asc_label">Ref: A to Z</t>
+                <t t-set="ref_desc_label">Ref: Z to A</t>        
+            </xpath>
+            <xpath expr="//t[@t-set='website_sale_sortable']" position="replace">
+                <t t-set="website_sale_sortable" t-value="[
+                (ref_asc_label, 'default_code asc'),
+                (ref_desc_label, 'default_code desc'),
+                (name_asc_label, 'name asc'),
+                (name_desc_label, 'name desc'),
+            ]"/>    
+            </xpath>
+        </template>
+    </data>
+</odoo>

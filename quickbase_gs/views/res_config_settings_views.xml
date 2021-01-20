@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.gsop</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="30"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+              <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="quickbase_gs" string="GSOP" data-key="quickbase_gs" groups="base.group_system">
+                  <h2>Quick Base</h2>
+                  <div class="row mt16 o_settings_container">
+                    <div class="col-xs-12 col-md-6 o_setting_box">
+                      <!-- User Token Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_usertoken"/>
+                        <div class="text-muted">
+                          User tokens can be managed from:<br/>Quick Base → My preferences → Manage User Tokens
+                        </div>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_usertoken"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- User Token End -->
+                      <!-- Domain URL Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_domainurl"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_domainurl"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Domain URL End -->
+                      <!-- Account Table ID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_accounts_tableid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_accounts_tableid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Account Table ID End -->
+                      <!-- Phases Table ID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_phases_tableid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_phases_tableid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Phases Table ID End -->
+                      <!-- Beneficiaries Table ID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_beneficiaries_tableid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_beneficiaries_tableid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Beneficiaries Table ID End -->
+                      <!-- Posts Table ID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_posts_tableid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_posts_tableid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Posts Table ID End -->
+                      <!-- Partners Table ID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_partners_tableid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_partners_tableid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Partners Table ID End -->
+                      <!-- Phase Beneficiary Table ID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_phase_beneficiary_tableid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_phase_beneficiary_tableid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Phase Beneficiary Table ID End -->
+                      <!-- Phase Partners Table ID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_phase_partner_tableid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_phase_partner_tableid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Phase Partners Table ID End -->
+                      <!-- Streams Table ID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_streams_tableid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_streams_tableid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Streams Table ID End -->
+                      <!-- Quick Base Web Hook Token Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="qb_web_hook_token"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="qb_web_hook_token"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Quick Base Web Hook Token End -->
+                    </div>
+                    <div class="col-xs-12 col-md-6 o_setting_box">
+                      <!-- Account Query FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_account_query_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_account_query_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Account Query FID End -->
+                      <!-- Account Query Record ID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_account_query_rec_id"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_account_query_rec_id"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Account Query Record ID End -->
+                      <!-- Account Avatar FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_account_avatar_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_account_avatar_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Account Avatar FID End -->
+                      <!-- Phase Data Query FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_phase_data_query_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_phase_data_query_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Phase Data Query FID End -->
+                      <!-- Beneficiaries Query FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_beneficiaries_query_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_beneficiaries_query_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Beneficiaries Query FID End -->
+                      <!-- Beneficiaries Avatar FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_beneficiaries_avatar_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_beneficiaries_avatar_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Beneficiaries Avatar FID End -->
+                      <!-- Posts Phases Query FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_posts_query_phases_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_posts_query_phases_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Posts Phases Query FID End -->
+                      <!-- Posts Picture FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_posts_picture_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_posts_picture_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Posts Picture FID End -->
+                      <!-- Partners Query FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_partners_query_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_partners_query_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Partners Query FID End -->
+                      <!-- Partners Logo FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_partners_logo_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_partners_logo_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Partners Logo FID End -->
+                      <!-- Phase Beneficiary Query FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_phase_beneficiary_query_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_phase_beneficiary_query_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Phase Beneficiary Query FID End -->
+                      <!-- Phase Partners Query FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_phase_partner_query_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_phase_partner_query_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Phase Partners Query FID End -->
+                      <!-- Phase Partners Query FID Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_streams_query_fid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_streams_query_fid"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Phase Partners Query FID End -->
+                      <!-- QuickBase Cache Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_cache"/>
+                        <field name="quickbase_cache"/>
+                      </div>
+                      <!-- QuickBase Cache End -->
+                    </div>
+                  </div>
+                    <!-- Quick Base Main App -->
+                    <h2>Quick Base Main App</h2>
+                    
+                    <div class="row mt16 o_settings_container">
+                      <div class="col-xs-12 col-md-6 o_setting_box">
+                          <div class="o_setting_right_pane">
+                            <label for="quickbase_user_name"/>
+                            <div class="text-muted">
+                              If not provided, Odoo takes<br/>credentials from code
+                            </div>
+                            <div class="content-group">
+                              <div class="row mt16">
+                                <field name="quickbase_user_name" password="True"/>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="o_setting_right_pane">
+                            <label for="quickbase_user_password"/>
+                            <div class="content-group">
+                              <div class="row mt16">
+                                <field name="quickbase_user_password" password="True"/>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="col-xs-12 col-md-6 o_setting_box">
+                          <div class="o_setting_right_pane">
+                            <label for="quickbase_main_usertoken"/>
+                            <div class="content-group">
+                              <div class="row mt16">
+                                <field name="quickbase_main_usertoken"/>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="o_setting_right_pane">
+                            <label for="quickbase_contacts_tableid"/>
+                            <div class="content-group">
+                              <div class="row mt16">
+                                <field name="quickbase_contacts_tableid"/>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="col-xs-12 col-md-6 o_setting_box">
+                        <div class="o_setting_right_pane">
+                          <label for="quickbase_users_tableid"/>
+                          <div class="content-group">
+                            <div class="row mt16">
+                              <field name="quickbase_users_tableid"/>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="o_setting_right_pane">
+                          <label for="quickbase_companies_tableid"/>
+                          <div class="content-group">
+                            <div class="row mt16">
+                              <field name="quickbase_companies_tableid"/>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6 o_setting_box">
+                      <div class="o_setting_right_pane">
+                        <label for="quickbase_phase_tableid"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="quickbase_phase_tableid"/>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  </div>
+                  <!--  -->
+                  <h2>Google</h2>
+                  <div class="row mt16 o_settings_container">
+                    <div class="col-xs-12 col-md-6 o_setting_box">
+                      <!-- Google Maps API Key Start -->
+                      <div class="o_setting_right_pane">
+                        <label for="google_maps_api_key"/>
+                        <div class="content-group">
+                          <div class="row mt16">
+                            <field name="google_maps_api_key"/>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Google Maps API Key End -->
+                    </div>
+                  </div>
+                </div>
+              </xpath>
+            </field>
+        </record>
+
+        <record id="action_gsop_config_settings" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'gsop'}</field>
+        </record>
+
+        <menuitem id="quickbase_gs.menu_config_settings" name="Configuration" parent="product_gs.menu_gsop_main" groups="base.group_erp_manager" sequence="2000"/>
+        <menuitem id="quickbase_gs.menu_general_settings" name="Settings" parent="quickbase_gs.menu_config_settings" sequence="0" action="action_gsop_config_settings" groups="base.group_erp_manager"/>
+    </data>
+</odoo>

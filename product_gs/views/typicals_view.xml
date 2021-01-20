@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="view_product_typical_tree" model="ir.ui.view">
+            <field name="name">view_product_typical_tree</field>
+            <field name="model">product.typical</field>
+            <field name="type">tree</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <tree string="view_product_typical_tree" multi_edit="1" >
+                    <field name="sequence" />
+                    <field name="name" />
+                    <field name="parent_id" optional="show"/>
+                    <field name='aluminum' optional="show"/>
+                    <field name='steel' optional="show"/>
+                    <field name='copper' optional="show"/>
+                    <field name='glass' optional="show"/>
+                    <field name='plastics' optional="show"/>
+                    <field name='wood' optional="show"/>
+                    <field name='mixed_metals' optional="show"/>
+                    <field name='mixed_plastics' optional="show"/>                                    
+                    <field name='carpet' optional="show" />
+                    <field name='personal_computers' optional="show" />
+                    <field name='concrete' optional="show" />
+                    <field name='drywall' optional="show" />
+                    <field name='fiberglass' optional="show" />
+                    <field name='vinyl_flooring' optional="show" />
+                    <field name='wood_flooring' optional="show" />
+                    <field name='product_qty' optional="show" />
+                    <field name='product_uom' optional="show" />
+                    <field name='currency_id' invisible="1" />
+                    <field name='unit_weight' optional="show" />
+                    <field name='cubic_feet' optional="show" />
+                    <field name='fair_market_value' widget="monetary" options="{'currency_field': 'currency_id'}" optional="show" />
+                </tree>
+            </field>
+        </record>
+        <record id="view_product_typical_form" model="ir.ui.view">
+            <field name="name">view_product_typical_form</field>
+            <field name="model">product.typical</field>
+            <field name="type">form</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <form string="view_product_typical_form" >
+                    <header>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" />
+                            <h1>
+                                <field name="name" class="oe_inline" placeholder="name" />
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="sequence" />
+                                <field name='parent_id' />
+                            </group>
+                            <group></group>
+                            <group>
+                                <field name='aluminum' />
+                                <field name='steel' />
+                                <field name='copper' />
+                                <field name='glass' />
+                                <field name='plastics' />
+                                <field name='wood' />
+                                <field name='mixed_metals' />
+                                <field name='mixed_plastics' />                                    
+                            </group>
+                            <group>
+                                <field name='carpet' />
+                                <field name='personal_computers' />
+                                <field name='concrete' />
+                                <field name='drywall' />
+                                <field name='fiberglass' />
+                                <field name='vinyl_flooring' />
+                                <field name='wood_flooring' />
+                            </group>
+                            <group>
+                                <field name='product_qty' />
+                                <field name='product_uom' />
+                            </group>
+                            <group>
+                                <field name='currency_id' invisible="1" />
+                                <field name='fair_market_value' widget="monetary" options="{'currency_field': 'currency_id'}" />
+                                <field name='unit_weight' />
+                                <field name='cubic_feet' />
+                            </group>
+    
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_product_typical_search" model="ir.ui.view">
+            <field name="name">view_product_typical_search</field>
+            <field name="model">product.typical</field>
+            <field name="type">search</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <search string="view_product_typical_search">
+                    <field name="name" />
+                    <field name="parent_id" />                    
+                </search>
+            </field>
+        </record>
+        <record id="product_typical_act" model="ir.actions.act_window">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Product Typicals</field>
+            <field name="res_model">product.typical</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="domain">[]</field>
+            <field name="context">\{}</field>
+            <field name="search_view_id" ref="view_product_typical_search" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add new product typical.
+                </p><p>
+                </p>
+            </field>
+        </record>
+        <record id="product_typical_menu" model="ir.ui.menu" >
+            <field name="name">Product Typicals</field>
+            <field name="sequence" eval="10" />
+            <field name="action" ref="product_typical_act" />
+            <field name="parent_id" ref="stock.menu_stock_inventory_control" />
+        </record> 
+        <record id="menu_gs_typicals" model="ir.ui.menu" >
+            <field name="name">Typicals</field>
+            <field name="sequence" eval="100" />
+            <field name="action" ref="product_typical_act" />
+            <field name="parent_id" ref="menu_gs_inventory" />
+        </record>
+        
+        <record id="factor_table_tree" model="ir.ui.view">
+            <field name="name">factor_table_tree</field>
+            <field name="model">factor.table</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="factor_table_tree" create="false" delete="false" edit="true" editable="bottom">
+                    <field name="name" />
+                    <field name="sr_factor" />
+                    <field name="recycle_factor" />
+                </tree>
+            </field>
+        </record>
+        
+        <record id="factor_table_action" model="ir.actions.act_window">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Factors Table</field>
+            <field name="res_model">factor.table</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <record id="menu_gs_factors" model="ir.ui.menu" >
+            <field name="name">Factors Table</field>
+            <field name="sequence" eval="1000" />
+            <field name="action" ref="factor_table_action" />
+            <field name="parent_id" ref="menu_gs_inventory" />
+            <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+            
+    </data>
+</odoo>

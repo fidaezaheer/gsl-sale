@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_partner_form_view_inherit_qb_gsop" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.qb.gsop</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='internal_notes']" position="after">
+                    <page name="quickbase_integration" string="GSOP Integration">
+                        <group name="container_row_2">
+                            <group string="Quick Base" name="quickbase" priority="1">
+                                <field name="qb_beneficiary_id"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_partner_tree_view_inherit_qb_gsop" model="ir.ui.view">
+            <field name="name">res.partner.tree.inherit.qb.gsop</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='phone']" position="before">
+                    <field name="qb_beneficiary_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="quickbase_gs.action_beneficiary">
+            <field name="name">Beneficiaries</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="res_partner_tree_view_inherit_qb_gsop"/>
+            <field name="domain">[('is_company','=',True)]</field>
+        </record>
+        
+        <menuitem name="Beneficiaries" id="quickbase_gs.beneficiaries" parent="quickbase_gs.menu_config_settings" action="quickbase_gs.action_beneficiary"/>
+    </data>
+</odoo>

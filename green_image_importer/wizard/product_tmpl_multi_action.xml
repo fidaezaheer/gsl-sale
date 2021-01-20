@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="product_template_tree_view_image_id" model="ir.ui.view">
+		<field name="name">product_template_tree_view_image</field>
+		<field name="model">product.template</field>
+		<field name="inherit_id" ref="product.product_template_tree_view" />
+		<field name="arch" type="xml">
+			<field name="image_1920" position="after">
+				<field string="Photo Id" name="photo_id"/>
+			</field>
+		</field>
+	</record>
+	<!-- PRODUCT.TEMPLATE  WIZARD AND MULTI ACTIONS -->
+	<record id="green_image_import_product_tmpl_wizard_form" model="ir.ui.view">
+		<field name="name">green.image.import.product.tmpl.wizard.form</field>
+		<field name="model">green.image.import.tmpl</field>
+		<field name="arch" type="xml">
+			<form string="Export Product Images">
+				<group>
+					<group>
+						<field name="zip_file" filename="file_name"/>
+                        <field name="file_name" invisible="0"/>
+					</group>
+					
+					<field name="product_tmpl_ids"/>
+				</group>
+				
+				<footer>
+					<button name="action_import" string="Import" type="object" class="oe_highlight"/>
+					<button string="Cancel" class="oe_link" special="cancel" />
+				</footer>
+			</form>
+		</field>
+	</record>
+   
+	<act_window
+		name="Import Images"
+		id="green_image_importer.green_image_import_product_tmpl_action"
+		res_model="green.image.import.tmpl"
+		binding_model="product.template"
+		view_mode="form"
+		target="new"/>
+                                 
+
+</odoo>

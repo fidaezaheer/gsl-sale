@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="placement_pivot_view" model="ir.ui.view">
+            <field name="name">placement_pivot_view</field>
+            <field name="model">stock.move</field>
+            <field name="priority" eval="10" />
+            <field name="inherit_id" eval="False" />
+            <field name="arch" type="xml">
+                <pivot string="placement_pivot_view" disable_linking="True">
+                    <field name="product_id" type="row" />
+                    <field name="partner_id" type="col"/>
+                    <field name="requested_qty" type="measure"/>
+                    <field name="reserved_availability" type="measure"/>
+                    <field name="actual_quantity_done" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        <record id="view_picking_form_gs" model="ir.ui.view">
+            <field name="name">view_picking_form_gs</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+                <field name="origin" position="after">
+                    <field name="phase_id" attrs="{'required': [('state','in',('draft',)),('picking_type_code','=','incoming')], 'invisible': [('picking_type_code','!=','incoming')]}" />
+                    <field name="picking_type_code" invisible="1" />
+                    <field name="disposition_type_id" />
+                </field>
+                <xpath expr="//field[@name='move_ids_without_package']//field[@name='product_id']" position="after">
+                    <field name="typical_id" />                    
+                </xpath>
+                <xpath expr="//field[@name='move_ids_without_package']//field[@name='product_id']" position="attributes">
+                    <attribute name="domain">['|',('phase_id','=?',parent.phase_id),('phase_id','=',False)]</attribute>
+                </xpath>
+                <button name="action_picking_move_tree" position="replace">
+                    <button name="action_picking_move_tree" class="oe_stat_button" icon="fa-arrows-v" type="object" help="List view of operations" attrs="{'invisible': ['|', '&amp;', ('show_operations', '=', True), '|', ('is_locked', '=', True), ('state', '=', 'done'), '&amp;', ('state', '=', 'done'), ('is_locked', '=', True)]}" context="{'picking_type_code': picking_type_code, 'default_picking_id': id, 'form_view_ref':'stock.view_move_form', 'address_in_id': partner_id, 'default_picking_type_id': picking_type_id, 'default_location_id': location_id, 'default_location_dest_id': location_dest_id}">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_text">Upload</span>
+                        </div>
+                    </button>
+                </button>
+            </field>
+        </record>
+        <record id="view_picking_search_gs" model="ir.ui.view">
+            <field name="name">view_picking_search_gs</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[last()]" position="after">
+                    <field name="phase_id" />
+                    <field name="project_id" />
+                    <filter name="intakes" string="Intakes" domain="[('picking_type_code','=','incoming'), ('phase_id','!=',False)]"/>
+                    <filter name="deliveries" string="Deliveries" domain="[('picking_type_code','=','outgoing')]"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="action_gs_intake" model="ir.actions.act_window">
+            <field name="name">Intakes</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="context">{'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0], 'search_default_project_id': context.get('project_id'), 'search_default_phase_id': context.get('default_phase_id'), 'search_default_intakes': True}</field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Intake
+                </p><p>
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

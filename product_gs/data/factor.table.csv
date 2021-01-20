@@ -1,0 +1,16 @@
+id,name,code,sr_factor,recycle_factor
+aluminum,Aluminum,aluminum,-9.12,-7.93
+steel,Steel,steel,-3.69,-1.8
+copper,Copper,copper,-7.33,-4.89
+glass,Glass,glass,-0.6,-0.28
+plastics,Plastics,plastics,-1.92,-0.25
+wood,Wood,wood,-2.03,-0.82
+mixed_metals,Mixed Metals,mixed_metals,0,-3.97
+mixed_plastics,Mixed Plastics,mixed_plastics,0,-0.98
+carpet,Carpet,carpet,-3.96,-2.37
+personal_computers,PCs,personal_computers,-54.15,-2.35
+concrete,Concrete,concrete,0,-0.01
+drywall,Drywall,drywall,-0.22,0.3
+fiberglass,Fiberglass,fiberglass,-0.5,0
+vinyl_flooring,Vinyl Flooring,vinyl_flooring,-0.62,0
+wood_flooring,Wood Flooring,wood_flooring,-4.06,0

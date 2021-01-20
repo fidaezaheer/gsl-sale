@@ -1,0 +1,67 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+        <record id="product_template_tree_view_image_id" model="ir.ui.view">
+            <field name="name">product_template_tree_view_image</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view" />
+            <field name="arch" type="xml">
+                <field name="image_1920" position="after">
+                    <field string="Photo Id" name="photo_id"/>
+                </field>
+            </field>
+        </record>
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="image_importer.action_window">
+      <field name="name">image_importer window</field>
+      <field name="res_model">image_importer.image_importer</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+<!--      <record model="ir.actions.server" id="mailout_action">-->
+<!--            <field name="name">Import</field>-->
+<!--            <field name="model_id" ref="product.model_product_template"/>-->
+<!--            <field name="binding_model_id" ref="product.model_product_template" />-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">-->
+<!--if records:-->
+<!--    action = records.open_zip_importer()-->
+<!--            </field>-->
+<!--        </record>-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="image_importer.action_server">
+      <field name="name">image_importer server</field>
+      <field name="model_id" ref="model_image_importer_image_importer"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="image_importer" id="image_importer.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="image_importer.menu_1" parent="image_importer.menu_root"/>
+    <menuitem name="Menu 2" id="image_importer.menu_2" parent="image_importer.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="image_importer.menu_1_list" parent="image_importer.menu_1"
+              action="image_importer.action_window"/>
+    <menuitem name="Server to list" id="image_importer" parent="image_importer.menu_2"
+              action="image_importer.action_server"/>
+-->
+  </data>
+</odoo>
