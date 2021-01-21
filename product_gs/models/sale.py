@@ -291,16 +291,6 @@ class SaleOrder(models.Model):
             'context': ctx,
         }
 
-    def _find_mail_template(self, force_confirmation_template=False):
-        template_id = False
-        if self.disposition_type_id.code == 'resale':
-            template_id = self.env.ref('product_gs.email_template_request_after_offer').id
-        elif self.state == 'sale':
-            template_id = self.env.ref('product_gs.email_template_request_confirm').id
-        else:
-            template_id = self.env.ref('product_gs.email_template_request_after_request').id
-        return template_id
-
 
 class SaleLine(models.Model):
     _inherit = 'sale.order.line'
