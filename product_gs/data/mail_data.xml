@@ -154,6 +154,41 @@ As always, if you have any questions, feel free to contact your Project Coordina
             <field name="lang">${object.partner_id.lang}</field>
             <field name="auto_delete" eval="True" />
         </record>
-
+        <record id="email_template_sale_order_is_placed" model="mail.template">
+            <field name="name">Sale: order is placed</field>
+            <field name="model_id" ref="sale.model_sale_order" />
+            <field name="subject">Order is placed!</field>
+            <field name="email_from">${(object.user_id.email_formatted or user.email_formatted) | safe}</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    % set phase = object.order_line[:1].product_id.phase_id
+    % set delivery_string = object.carrier_id.name or 'Pickup'
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Dear ${object.partner_id.name}, <br/><br/>
+        Thank you for your purchase from ${phase.project_id.number}-${phase.address}!  Confirmation is below. <br/><br/>        
+        Now that you have completed your purchase, you must select a ${delivery_string} time via the following link: <a href="${phase.calendly_url}">SELECT ${delivery_string.upper()} TIME</a>.   Some time slots are limited so please do so as soon as possible.  You will receive a confirmation of your ${delivery_string} time request, including a link should you need to change your ${delivery_string} time. <br/><br/>
+        Terms &amp; Conditions for your purchase: <br/>
+        <ul>
+            <li>There is no representation or warranty being made by your employer or its partners with respect to the quality or any consequences of use of the item(s) being sold.</li>
+            <li>These items are being purchased on an ‘as is where is’ basis.</li>
+            <li>The purchaser agrees that s/he will pick up the property at the specified address in the time window reserved, beyond which you will be considered to have abandoned the item without possibility of refund.</li>
+            <li>Allowable refunds can be requested by email at <a href="mailto:ES@greenstandardsltd.com">ES@greenstandardsltd.com</a> where they fall into any of the following categories: </li>
+            <ul>
+                <li>Cancellation is requested at least 48 hours prior to scheduled ${delivery_string} time </li>
+                <li>The item(s) do(es) not meet quality expectations or representation</li>
+                <li>The item(s) is/are not in working order or show significant cosmetic damage</li>
+            </ul>
+        </ul>
+        For all questions please consult the <a href="https://greenstandardsltd.com/how-it-works/">FAQ page by clicking here</a>. <br/><br/>        
+        If you still have questions, please reach out to <a href="mailto:ES@greenstandardsltd.com">ES@greenstandardsltd.com</a>, and include your name, site location and order number. <br/><br/>
+        Thank you,<br/>
+        Green Standards Ltd. <br/>
+    </p>
+</div>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True" />
+        </record>
     </data>
 </odoo>
