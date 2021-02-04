@@ -17,12 +17,12 @@
                     <div align="left" id="informations" >
                         <div t-if="doc.project_pm_lead_id">
                             PM: <t t-esc="doc.project_pm_lead_id.name" /><br/>
-                            PM Contact No: <t t-esc="doc.project_pm_lead_id.phone" /><br/>
+                            PM Phone: <t t-esc="doc.project_pm_lead_id.phone" /><br/>
                             PM Email: <t t-esc="doc.project_pm_lead_id.email" /><br/> <br/>
                         </div>
                         <div t-if="doc.pc_lead_id">
                             PC: <t t-esc="doc.pc_lead_id.name" /><br/>
-                            PC Contact No: <t t-esc="doc.pc_lead_id.phone" /><br/>
+                            PC Phone: <t t-esc="doc.pc_lead_id.phone" /><br/>
                             PC Email: <t t-esc="doc.pc_lead_id.email" /><br/>
                         </div>
                 </div>
