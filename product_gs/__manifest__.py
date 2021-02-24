@@ -47,6 +47,7 @@
         'data/factor.table.csv',
         'wizards/tot_wizard.xml',
         'data/mail_data.xml',
+        'views/access_map_field_pricelist.xml',
         # 'data/cron.xml'
     ],
     'demo': [

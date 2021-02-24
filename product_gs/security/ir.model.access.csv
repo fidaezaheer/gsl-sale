@@ -20,3 +20,5 @@ access_tot_wizard,access_tot_wizard,model_tot_wizard,base.group_user,1,1,1,1
 access_los_report,access_los_report,model_los_report,base.group_user,1,1,1,1 
 access_summary_report,access_summary_report,model_summary_report,base.group_user,1,1,1,1 
 access_placement_report,access_placement_report,model_placement_report,base.group_user,1,1,1,1 
+access_admin_map_field_pricelist,access_admin_map_field_pricelist,model_map_field_pricelist,base.group_system,1,1,1,1 
+access_map_field_pricelist,access_map_field_pricelist,model_map_field_pricelist,base.group_user,1,0,0,0 
