@@ -55,9 +55,9 @@ class StockMove(models.Model):
     building = fields.Char(related='product_id.building', readonly=False)
     description_sale = fields.Text(related='product_id.description_sale', readonly=False)
     list_price = fields.Float('Sales Price', digits='Product Price', related='product_id.list_price', readonly=False)
-    usd_price = fields.Float(digits='Product Price')
-    cad_price = fields.Float(digits='Product Price')
-    eur_price = fields.Float(digits='Product Price')
+    pricelist_name = fields.Char(string='Pricelist',)
+    pricelist_value = fields.Char(string='Value',)
+    
 
     reserved_availability = fields.Float(
         'Reserved', compute='_compute_reserved_availability',
@@ -79,35 +79,34 @@ class StockMove(models.Model):
         return res
     
     def action_create_pricelist_items(self):
-        maps = self.env['map.field.pricelist'].search([])
+        Pricelist = self.env['product.pricelist']
         Item = self.env['product.pricelist.item']
         for move in self:
-            for m in maps:
-                price = getattr(move, m.name, 0)
-                if price > 0:
-                    item = Item.search([('product_tmpl_id','=',move.product_id.product_tmpl_id.id), ('pricelist_id','=',m.pricelist_id.id)], limit=1)
-                    if item:
-                        item.write({
-                            'applied_on': '1_product',
-                            'compute_price': 'fixed',
-                            'fixed_price': price,
-                        })
-                    else:
-                        item = Item.create({
-                            'applied_on': '1_product',
-                            'product_tmpl_id': move.product_id.product_tmpl_id.id,
-                            'compute_price': 'fixed',
-                            'fixed_price': price,
-                            'pricelist_id': m.pricelist_id.id
-                        })
+            pt = move.product_id.product_tmpl_id.id
+            for pricelist, value in zip(move.pricelist_name.split(','), move.pricelist_value.split(',')):
+                try:
+                    price_value = float(value)
+                except:
+                    price_value = 0
+                if price_value <= 0:
+                    continue
+                pricelist = Pricelist.search([('name','=ilike',pricelist)], limit=1)
+                if not pricelist:
+                    continue
+                item = Item.search([('product_tmpl_id','=',pt), ('pricelist_id','=',pricelist.id)], limit=1)
+                if item:
+                    item.write({
+                        'applied_on': '1_product',
+                        'compute_price': 'fixed',
+                        'fixed_price': price_value,
+                    })
+                else:
+                    item = Item.create({
+                        'applied_on': '1_product',
+                        'product_tmpl_id': pt,
+                        'compute_price': 'fixed',
+                        'fixed_price': price_value,
+                        'pricelist_id': pricelist.id
+                    })
 
-class MapFieldPricelist(models.Model):
-    _name = 'map.field.pricelist'
-    _description = 'Map Field Pricelist'
-
-    _rec_name = 'name'
-    _order = 'name ASC'
-
-    name = fields.Char(required=True)
-    pricelist_id = fields.Many2one(string='Pricelist', comodel_name='product.pricelist', ondelete='restrict', required=True)
     
