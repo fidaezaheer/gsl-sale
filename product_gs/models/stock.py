@@ -31,7 +31,11 @@ class StockPicking(models.Model):
                     raise ValidationError('Products must be from same project/phase.')
                 else:
                     phase.message_post(body='Placement validated <a href=# data-oe-model=stock.picking data-oe-id=%d>%s</a>'%(picking.id, picking.name))
+        self.action_create_pricelist_items()
         return res
+
+    def action_create_pricelist_items(self):
+        self.mapped('move_lines').action_create_pricelist_items()
 
 class StockMove(models.Model):
     _inherit = 'stock.move'
@@ -51,6 +55,9 @@ class StockMove(models.Model):
     building = fields.Char(related='product_id.building', readonly=False)
     description_sale = fields.Text(related='product_id.description_sale', readonly=False)
     list_price = fields.Float('Sales Price', digits='Product Price', related='product_id.list_price', readonly=False)
+    pricelist_name = fields.Char(string='Pricelist',)
+    pricelist_value = fields.Char(string='Value',)
+    
 
     reserved_availability = fields.Float(
         'Reserved', compute='_compute_reserved_availability',
@@ -70,3 +77,36 @@ class StockMove(models.Model):
             if move.picking_code == 'incoming' and move.picking_id.phase_id:
                 move.product_id.intake_qty += move.product_uom_qty
         return res
+    
+    def action_create_pricelist_items(self):
+        Pricelist = self.env['product.pricelist']
+        Item = self.env['product.pricelist.item']
+        for move in self:
+            pt = move.product_id.product_tmpl_id.id
+            for pricelist, value in zip(move.pricelist_name.split(','), move.pricelist_value.split(',')):
+                try:
+                    price_value = float(value)
+                except:
+                    price_value = 0
+                if price_value <= 0:
+                    continue
+                pricelist = Pricelist.search([('name','=ilike',pricelist)], limit=1)
+                if not pricelist:
+                    continue
+                item = Item.search([('product_tmpl_id','=',pt), ('pricelist_id','=',pricelist.id)], limit=1)
+                if item:
+                    item.write({
+                        'applied_on': '1_product',
+                        'compute_price': 'fixed',
+                        'fixed_price': price_value,
+                    })
+                else:
+                    item = Item.create({
+                        'applied_on': '1_product',
+                        'product_tmpl_id': pt,
+                        'compute_price': 'fixed',
+                        'fixed_price': price_value,
+                        'pricelist_id': pricelist.id
+                    })
+
+    

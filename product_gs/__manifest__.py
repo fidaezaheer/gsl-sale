@@ -20,6 +20,7 @@
         'website_sale',
         'website_form',
         'website_sale_delivery',
+        'base_fontawesome'
     ],
     'external_dependencies': {
         'python': [

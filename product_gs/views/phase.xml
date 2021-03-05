@@ -49,19 +49,19 @@
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button name="%(stock.product_template_action_product)d" string="Inventory" type="action" class="oe_stat_button" icon="fa-arrows-v" context="{'default_phase_id': id}" />
-                            <button name="%(action_gs_intake)d" string="Upload" type="action" class="oe_stat_button" icon="fa-arrows-v" context="{'default_phase_id': id}" />
-                            <button name="action_open_mailouts" string="Mailout" type="object" class="oe_stat_button" icon="fa-arrows-v" context="{'default_phase_id': id}" />
-                            <button name="action_open_requests" string="Request" type="object" class="oe_stat_button" icon="fa-arrows-v" context="{'default_from_phase_id': id}" />
-                            <button name="action_open_requestlines" string="Placement" type="object" class="oe_stat_button" icon="fa-arrows-v" context="{'default_from_phase_id': id}" />
-                            <button name="%(action_placement_report)d" string="Placement report" type="action" class="oe_stat_button" icon="fa-arrows-v" context="{'show_stock': True}" />
-                            <button name="%(action_placement_report)d" string="Selected Placement" type="action" class="oe_stat_button" icon="fa-arrows-v" context="{'selected': True}" />
-                            <button name="action_open_deliveries" string="Deliveries" type="object" class="oe_stat_button" icon="fa-arrows-v" />
-                            <button name="%(action_summary_report)d" string="Summary Report" type="action" class="oe_stat_button" icon="fa-arrows-v" />
-                            <button name="%(action_los_report)d" string="LOS" type="action" class="oe_stat_button" icon="fa-arrows-v" />
-                            <button name="action_open_itemreport" string="Item Report" type="object" class="oe_stat_button" icon="fa-arrows-v" />
-                            <button name="action_open_valuator" string="FMV/Wt Overide" type="object" class="oe_stat_button" icon="fa-arrows-v" />
-                            <button name="action_open_placements" string="Placements Pivot" type="object" class="oe_stat_button" icon="fa-arrows-v" context="{'show_stock': True}" />
+                            <button name="%(stock.product_template_action_product)d" string="Inventory" type="action" class="oe_stat_button" icon="fa-chair" context="{'default_phase_id': id}" />
+                            <button name="%(action_gs_intake)d" string="Upload" type="action" class="oe_stat_button" icon="fa-file-upload" context="{'default_phase_id': id}" />
+                            <button name="action_open_mailouts" string="Mailout" type="object" class="oe_stat_button" icon="fa-envelope-open-text" context="{'default_phase_id': id}" />
+                            <button name="action_open_requests" string="Request" type="object" class="oe_stat_button" icon="fa-clipboard-list" context="{'default_from_phase_id': id}" />
+                            <button name="action_open_requestlines" string="Placement" type="object" class="oe_stat_button" icon="fa-luggage-cart" context="{'default_from_phase_id': id}" />
+                            <button name="%(action_placement_report)d" string="Placement report" type="action" class="oe_stat_button" icon="fa-table" context="{'show_stock': True}" />
+                            <button name="%(action_placement_report)d" string="Selected Placement" type="action" class="oe_stat_button" icon="fa-check-double" context="{'selected': True}" />
+                            <button name="action_open_deliveries" string="Deliveries" type="object" class="oe_stat_button" icon="fa-truck" />
+                            <button name="%(action_summary_report)d" string="Summary Report" type="action" class="oe_stat_button" icon="fa-table" />
+                            <button name="%(action_los_report)d" string="LOS" type="action" class="oe_stat_button" icon="fa-file-excel" />
+                            <button name="action_open_itemreport" string="Item Report" type="object" class="oe_stat_button" icon="fa-table" />
+                            <button name="action_open_valuator" string="FMV/Wt Overide" type="object" class="oe_stat_button" icon="fa-balance-scale" />
+                            <button name="action_open_placements" string="Placements Pivot" type="object" class="oe_stat_button" icon="fa-table" context="{'show_stock': True}" />
                         </div>    
                         <div class="oe_title">
                             <label for="name" class="oe_edit_only" />

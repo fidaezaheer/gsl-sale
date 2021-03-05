@@ -239,5 +239,3 @@ class Model(models.Model):
     _order = 'name ASC'
 
     name = fields.Char(string='Name',required=True,default=lambda self: _('New'),copy=False)
-
-    
