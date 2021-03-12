@@ -511,14 +511,18 @@
             <table style="text-align: left; border-collapse: collapse; width: 70%;font-family:'Book Antiqua';" border="1" cellpadding="0" cellspacing="0" padding="0" margin="2">
                 <tbody>
                     <tr valign="top">
-                        <span>&#160;Signature: 						</span>
-                        <br>
-                            <span>&#160;Printed Name: 						</span>
-                        </br>
-                        <span>&#160;Title: 							</span>
-                        <br>
-                            <span>&#160;Date: 							</span>
-                        </br>
+                        <div t-if="doc.signature" class="mt32 ml64 mr4" name="signature">
+                            <div class="offset-8">
+                                <img t-att-src="image_data_uri(doc.signature)" style="max-height: 4cm; max-width: 8cm;"/>
+                            </div>
+                            <div class="offset-8 text-center">
+                                <p>
+                                    Printed Name: <span t-field="doc.signed_by" /><br/> 
+                                    Title: <br/> 
+                                    Date: <span t-field="doc.signed_on" /><br/> 
+                                </p>
+                            </div>
+                        </div>
                     </tr>
                 </tbody>
             </table>

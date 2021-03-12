@@ -61,6 +61,8 @@ class GSProjectPhase(models.Model):
     total_cubic_feet = fields.Float(string='Total',compute='_get_total_cubic_feet')
     truck_count = fields.Integer(string='Truck count',compute='_get_total_cubic_feet')
 
+    tot_type = fields.Selection(string='Type',selection=[('Canada', 'Canada'), ('USA', 'USA'), ('TDSB', 'TDSB'), ('wf','WF')], default='Canada', required=True)
+
     @api.depends('product_variant_ids.intake_qty', 'product_variant_ids.cubic_feet')
     def _get_total_cubic_feet(self):
         for phase in self:

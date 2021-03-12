@@ -84,6 +84,7 @@
                                         <field name="decom_start" />
                                         <field name="decom_end" />
                                         <field name="calendly_url" />
+                                        <field name="tot_type" />
                                     </group>
                                     <group>
                                         <field name="project_pm_lead_id" />
