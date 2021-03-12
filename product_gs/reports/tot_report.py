@@ -21,11 +21,11 @@ class TotReport(models.AbstractModel):
 
     @api.model
     def _get_report_values(self, docids, data={}):
-        tot_type = data.get('tot_type', 'Canada')
+        docids = docids or data.get('docids')
+        tot_type = self.env['sale.order'].browse(docids).mapped('from_phase_id')[:1].tot_type or 'Canada'
         tot_title = 'GreenStandards Transfer of Title'
         if tot_type != 'wf':
             tot_title = "%s - %s" % (tot_title, tot_type)
-        docids = docids or data.get('docids')
         docargs = {
             'doc_ids': docids,
             'doc_model': 'sale.order',

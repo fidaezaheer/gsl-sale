@@ -37,6 +37,9 @@ class SaleOrder(models.Model):
 
     make_approve_qty_zero = fields.Boolean(default=False)
     
+    def has_to_be_signed(self, include_draft=False):
+        return not self.is_expired and self.require_signature and not self.signature
+
     @api.model
     def run_make_approved_quantity_zero(self):
         Orders = self.search([('make_approve_qty_zero','=',True),('state','=','sent')])
@@ -83,17 +86,7 @@ class SaleOrder(models.Model):
         return ReportAction.report_action(None, data={'tot_type': tot_type, 'docids':orders.ids})
 
     def action_tot(self):
-        return {
-            'name': _('Print TOT'),
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            'res_model': 'tot.wizard',
-            'context': {
-                'default_order_id': self.id
-            },
-            'target': 'new'
-        }
-        
+        return self.action_print_tot()
 
     def action_post(self):
         self.filtered(lambda o: o.state == 'draft').write({
@@ -291,6 +284,21 @@ class SaleOrder(models.Model):
             'context': ctx,
         }
 
+    def _attach_sign(self):
+        """ Render the delivery report in pdf and attach it to the picking in `self`. """
+        self.ensure_one()
+        ReportAction = self.env.ref('product_gs.gs_tot_pdf')
+        report = ReportAction._render_qweb_pdf(self.id)
+        filename = "%s_signed_delivery_slip" % self.name
+        if self.partner_id:
+            message = _('Order signed by %s') % (self.partner_id.name)
+        else:
+            message = _('Order signed')
+        self.message_post(
+            attachments=[('%s.pdf' % filename, report[0])],
+            body=message,
+        )
+        return True
 
 class SaleLine(models.Model):
     _inherit = 'sale.order.line'

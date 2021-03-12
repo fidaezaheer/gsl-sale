@@ -21,6 +21,10 @@ from odoo.osv import expression
 from odoo.addons.website_sale.controllers.main import WebsiteSale, TableCompute
 from odoo.tools.misc import xlwt
 
+from odoo.addons.sale.controllers.portal import CustomerPortal
+from odoo.exceptions import AccessError, MissingError
+from odoo.addons.portal.controllers.mail import _message_post_helper
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -66,6 +70,7 @@ class MailOut(WebsiteSale):
             if not sale_order.mailout:
                 sale_order.write({
                     'mailout': mailout.id,
+                    'from_phase_id': request.env['product.product'].sudo().browse(int(product_id)).phase_id.id,
                     'disposition_type_id': request.env['disposition.type'].sudo().search([('code','=',mailout.request_type)], limit=1).id
                 })
 
@@ -317,3 +322,63 @@ class ExportReport(http.Controller):
         workbook.save(response.stream)
 
         return response
+
+
+class CustomerPortal(CustomerPortal):
+
+    # @http.route(['/my/orders/<int:order_id>/accept'], type='json', auth="public", website=True)
+    # def portal_quote_accept(self, order_id, access_token=None, name=None, signature=None):
+    #     try:
+    #         order_sudo = self._document_check_access('sale.order', order_id, access_token=access_token)
+    #     except (AccessError, MissingError):
+    #         return {'error': _('Invalid order.')}
+    #     pdf = request.env.ref('product_gs.gs_tot_pdf').sudo()._render_qweb_pdf([order_sudo.id])[0]
+    #     _message_post_helper(
+    #         'sale.order', order_sudo.id, _('TOT signed by %s') % (name,),
+    #         attachments=[('%s.pdf' % order_sudo.name, pdf)],
+    #         **({'token': access_token} if access_token else {}))
+    #     res = super(CustomerPortal, self).portal_quote_accept(order_id, access_token, name, signature)
+    #     return res
+    
+    @http.route(['/my/orders/<int:order_id>/accept'], type='json', auth="public", website=True)
+    def portal_quote_accept(self, order_id, access_token=None, name=None, signature=None):
+        # get from query string if not on json param
+        access_token = access_token or request.httprequest.args.get('access_token')
+        try:
+            order_sudo = self._document_check_access('sale.order', order_id, access_token=access_token)
+        except (AccessError, MissingError):
+            return {'error': _('Invalid order.')}
+
+        if not order_sudo.has_to_be_signed():
+            return {'error': _('The order is not in a state requiring customer signature.')}
+        if not signature:
+            return {'error': _('Signature is missing.')}
+
+        try:
+            order_sudo.write({
+                'signed_by': name,
+                'signed_on': fields.Datetime.now(),
+                'signature': signature,
+            })
+            request.env.cr.commit()
+        except (TypeError, binascii.Error) as e:
+            return {'error': _('Invalid signature data.')}
+
+        if not order_sudo.has_to_be_paid():
+            order_sudo.action_confirm()
+            order_sudo._send_order_confirmation_mail()
+        ## change default pdf
+        pdf = request.env.ref('product_gs.gs_tot_pdf').sudo()._render_qweb_pdf([order_sudo.id])[0]
+
+        _message_post_helper(
+            'sale.order', order_sudo.id, _('TOT signed by %s') % (name,),
+            attachments=[('TOT-%s.pdf' % order_sudo.name, pdf)],
+            **({'token': access_token} if access_token else {}))
+
+        query_string = '&message=sign_ok'
+        if order_sudo.has_to_be_paid(True):
+            query_string += '#allow_payment=yes'
+        return {
+            'force_refresh': True,
+            'redirect_url': order_sudo.get_portal_url(query_string=query_string),
+        }
